@@ -12,11 +12,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="538">
-              <caret line="75" column="45" lean-forward="true" selection-start-line="75" selection-start-column="45" selection-end-line="75" selection-end-column="45" />
+              <caret line="75" column="18" lean-forward="true" selection-start-line="75" selection-start-column="14" selection-end-line="75" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -33,7 +33,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.component.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.component.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/app.component.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
@@ -119,9 +119,9 @@
         <option value="$PROJECT_DIR$/src/app/car-list/car-list.component.html" />
         <option value="$PROJECT_DIR$/src/app/app.module.ts" />
         <option value="$PROJECT_DIR$/src/app/app.component.ts" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/index.html" />
         <option value="$PROJECT_DIR$/src/app/app.component.html" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -140,7 +140,7 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="width" value="1932" />
     <option name="height" value="1045" />
   </component>
@@ -193,7 +193,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../backend" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
@@ -216,7 +216,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="npm.Unnamed">
+  <component name="RunManager" selected="npm.Angular start">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     </configuration>
@@ -236,7 +236,7 @@
       </option>
       <patterns />
     </configuration>
-    <configuration name="Unnamed" type="MavenRunConfiguration" factoryName="Maven">
+    <configuration name="Maven build" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
         <option name="myRunnerSettings" />
@@ -308,7 +308,7 @@
       <properties />
       <listeners />
     </configuration>
-    <configuration name="Unnamed" type="js.build_tools.npm" factoryName="npm">
+    <configuration name="Angular start" type="js.build_tools.npm" factoryName="npm">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="start" />
       <node-interpreter value="project" />
@@ -341,8 +341,8 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Maven.Unnamed" />
-      <item itemvalue="npm.Unnamed" />
+      <item itemvalue="Maven.Maven build" />
+      <item itemvalue="npm.Angular start" />
     </list>
   </component>
   <component name="SbtLocalSettings">
@@ -365,12 +365,12 @@
       <updated>1536026886771</updated>
       <workItem from="1536026892113" duration="1251000" />
       <workItem from="1536028472232" duration="8751000" />
-      <workItem from="1536090862743" duration="1189000" />
+      <workItem from="1536090862743" duration="2558000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11191000" />
+    <option name="totallyTimeSpent" value="12560000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -393,13 +393,13 @@
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32943925" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32943925" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32943925" />
       <window_info id="Capture Tool" order="2" />
       <window_info anchor="bottom" id="TypeScript" order="7" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25397456" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25397456" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -552,13 +552,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="538">
-          <caret line="75" column="45" lean-forward="true" selection-start-line="75" selection-start-column="45" selection-end-line="75" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -582,6 +575,13 @@
           <folding>
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="538">
+          <caret line="75" column="18" lean-forward="true" selection-start-line="75" selection-start-column="14" selection-end-line="75" selection-end-column="18" />
         </state>
       </provider>
     </entry>

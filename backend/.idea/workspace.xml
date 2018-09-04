@@ -92,7 +92,7 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="width" value="1932" />
     <option name="height" value="1045" />
   </component>
@@ -182,7 +182,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.Application">
+  <component name="RunManager" selected="Spring Boot.Application run">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     </configuration>
@@ -226,9 +226,10 @@
         </option>
       </MavenSettings>
     </configuration>
-    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <configuration name="Application run" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="backend" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.shekhargulati.app.Application" />
+      <option name="ALTERNATIVE_JRE_PATH" />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -254,7 +255,7 @@
     </configuration>
     <list>
       <item itemvalue="Maven.Server start" />
-      <item itemvalue="Spring Boot.Application" />
+      <item itemvalue="Spring Boot.Application run" />
     </list>
   </component>
   <component name="SbtLocalSettings">
@@ -278,12 +279,12 @@
       <workItem from="1536026875029" duration="1241000" />
       <workItem from="1536028442161" duration="1825000" />
       <workItem from="1536090846476" duration="611000" />
-      <workItem from="1536091470407" duration="584000" />
+      <workItem from="1536091470407" duration="1767000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4261000" />
+    <option name="totallyTimeSpent" value="5444000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
