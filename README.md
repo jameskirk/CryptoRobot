@@ -23,7 +23,7 @@ only first time execute:
 
 for start Angular server:
 
-<img src="https://gyazo.com/fa55379cc57d3c4e456f497a2eb37e67"></img>
+<img src="https://gyazo.com/fa55379cc57d3c4e456f497a2eb37e67.png"></img>
 
 in browser open http://localhost:4200
 ## Hot reloading
