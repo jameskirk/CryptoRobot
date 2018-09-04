@@ -7,6 +7,7 @@ import { CarService } from '../shared/car/car.service';
 
 })
 export class CarListComponent implements OnInit {
+  title = 'Cars page';
   cars: Array<any>;
 
   constructor(private carService: CarService) { }
