@@ -73,7 +73,7 @@
             <phase>test</phase>
             <configuration>
               <arguments>test</arguments>
-              <!--<failOnError>true</failOnError>-->
+              <failOnError>true</failOnError>
             </configuration>
           </execution>
         </executions>

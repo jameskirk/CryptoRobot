@@ -10,10 +10,6 @@ import { CarService } from './shared/car/car.service';
 const appRoutes: Routes = [
   {path: '', redirectTo: '/', pathMatch: 'full'},
   {
-    path: 'home',
-    component: CarListComponent
-  },
-  {
     path: 'car-list',
     component: CarListComponent
   }
