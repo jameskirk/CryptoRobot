@@ -11,7 +11,7 @@ node/
 target/
 
 # IDEs and editors
-/.idea
+.idea/
 .project
 .classpath
 .c9/
@@ -33,7 +33,7 @@ coverage
 libpeerconnection.log
 npm-debug.log
 testem.log
-/typings
+typings
 
 # e2e
 e2e/*.js

@@ -6,13 +6,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { CarListComponent } from './car-list/car-list.component';
 import { CarService } from './shared/car/car.service';
+import {AppService} from "app/app.service";
+import {LoginComponent} from "./security/login.component";
+import {FormsModule} from "@angular/forms";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/', pathMatch: 'full'},
   {
     path: 'car-list',
     component: CarListComponent
-  }
+  },
+  { path: 'login', component: LoginComponent}
 ];
 
 
@@ -20,18 +24,19 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-
+    LoginComponent,
     CarListComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes, { enableTracing: true,})
+    RouterModule.forRoot(appRoutes, { enableTracing: true,}),
+    FormsModule
   ],
   exports: [
     RouterModule
   ],
-  providers: [CarService],
+  providers: [CarService, AppService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
