@@ -15,7 +15,7 @@ for start server execute:
 
 in browser open http://localhost:8080/api/cars
 ## Running the frontend for development mode
-install "yarn" https://yarnpkg.com/lang/en/ 
+install "npm" https://nodejs.org/en/download/
 
 only first time execute:
 
