@@ -16,15 +16,19 @@ public class TokenAuthenticationService {
 
     static final String SECRET = "ThisIsASecret";
 
-    static final String TOKEN_PREFIX = "Bearer";
+    static final String TOKEN_PREFIX = "Bearer";//"Bearer";
 
-    static final String HEADER_STRING = "Authorization";
+    static final String HEADER_STRING = "Authorization";//"Authorization";
+
+    static final String LOGIN_RESPONSE_TOKEN_PREFIX = "";//"Bearer";
+
+    static final String LOGIN_RESPONSE_HEADER_STRING = "token";//"Authorization";
 
     public static void addAuthentication(HttpServletResponse res, String username) {
         String JWT = Jwts.builder().setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET).compact();
-        res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+        res.addHeader(LOGIN_RESPONSE_HEADER_STRING, LOGIN_RESPONSE_TOKEN_PREFIX + "" + JWT);
     }
 
     public static Authentication getAuthentication(HttpServletRequest request) {

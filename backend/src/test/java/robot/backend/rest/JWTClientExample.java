@@ -36,7 +36,7 @@ public class JWTClientExample {
 
 		HttpHeaders responseHeaders = response.getHeaders();
 
-		List<String> list = responseHeaders.get("Authorization");
+		List<String> list = responseHeaders.get("token");
 		return list == null || list.isEmpty() ? null : list.get(0);
 	}
 
@@ -47,7 +47,7 @@ public class JWTClientExample {
 		//
 		// Authorization string (JWT)
 		//
-		headers.set("Authorization", authorizationString);
+		headers.set("Authorization", "Bearer " + authorizationString);
 		//
 		headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
 
@@ -75,7 +75,7 @@ public class JWTClientExample {
 
 		String authorizationString = postLogin(username, password);
 
-		System.out.println("Authorization String=" + authorizationString);
+		System.out.println("token=" + authorizationString);
 
 		// Call REST API:
 		callRESTApi(URL_EMPLOYEES, authorizationString);

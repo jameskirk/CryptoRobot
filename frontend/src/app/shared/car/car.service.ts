@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class CarService {
-  public API = '//localhost:8080/api';
+  public API = '//localhost:8080';
   public CAR_API = this.API + '/cars';
 
   constructor(private http: HttpClient) {

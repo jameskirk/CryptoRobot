@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { CarListComponent } from './car-list/car-list.component';
@@ -9,6 +9,8 @@ import { CarService } from './shared/car/car.service';
 import {AppService} from "app/app.service";
 import {LoginComponent} from "./security/login.component";
 import {FormsModule} from "@angular/forms";
+import {JwtInterceptor} from "./jwt.interceptor";
+import {LogoutComponent} from "./security/logout.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/', pathMatch: 'full'},
@@ -16,7 +18,8 @@ const appRoutes: Routes = [
     path: 'car-list',
     component: CarListComponent
   },
-  { path: 'login', component: LoginComponent}
+  { path: 'login', component: LoginComponent},
+  { path: 'logout', component: LogoutComponent}
 ];
 
 
@@ -25,6 +28,7 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     LoginComponent,
+    LogoutComponent,
     CarListComponent
   ],
   imports: [
@@ -36,7 +40,7 @@ const appRoutes: Routes = [
   exports: [
     RouterModule
   ],
-  providers: [CarService, AppService],
+  providers: [CarService, AppService, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
