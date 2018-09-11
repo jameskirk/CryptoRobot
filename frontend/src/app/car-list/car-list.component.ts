@@ -1,5 +1,5 @@
 import { Component , OnInit} from '@angular/core';
-import { CarService } from '../shared/car/car.service';
+import { CarService } from './car.service';
 
 @Component({
   selector: 'app-car-list',
