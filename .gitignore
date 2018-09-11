@@ -12,8 +12,8 @@ target/
 
 # IDEs and editors
 .idea/
-backend/.idea/
-frontend/.idea/
+backend/.idea/*
+frontend/.idea/*
 .project
 .classpath
 .c9/
