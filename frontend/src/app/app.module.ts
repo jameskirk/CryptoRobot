@@ -12,12 +12,14 @@ import {FormsModule} from "@angular/forms";
 import {JwtInterceptor} from "./jwt.interceptor";
 import {LogoutComponent} from "./security/logout.component";
 import {AuthGuard} from "./auth.guard";
+import {TradeComponent} from "./trade/trade.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/', pathMatch: 'full'},
   { path: 'car-list', canActivate: [AuthGuard], component: CarListComponent },
   { path: 'login', component: LoginComponent},
-  { path: 'logout', component: LogoutComponent}
+  { path: 'logout', component: LogoutComponent},
+  { path: 'trade', component: TradeComponent},
 ];
 
 
@@ -27,7 +29,8 @@ const appRoutes: Routes = [
     AppComponent,
     LoginComponent,
     LogoutComponent,
-    CarListComponent
+    CarListComponent,
+    TradeComponent
   ],
   imports: [
     BrowserModule,

@@ -19,7 +19,7 @@ export class LoginComponent {
     console.log("Login Component onSubmit");
     this.app.login(this.credentials.username, this.credentials.password);
 
-    return this.router.navigateByUrl('/login');
+    return this.router.navigateByUrl('/trade');
 
   }
 
