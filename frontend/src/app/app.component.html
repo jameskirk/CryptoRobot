@@ -1,3 +1,4 @@
+
 <nav class="site-header sticky-top py-1">
   <div class="container d-flex flex-column flex-md-row justify-content-between">
     <a class="py-2" href="#">
@@ -5,9 +6,9 @@
     </a>
     <a class="py-2 d-none d-md-inline-block" routerLink="/trade">Trade</a>
     <a class="py-2 d-none d-md-inline-block" routerLink="/car-list">Bots</a>
-    <a class="py-2 d-none d-md-inline-block" routerLink="/car-list">Account</a>
-    <a class="py-2 d-none d-md-inline-block" routerLink="/login">Login</a>
-    <a class="py-2 d-none d-md-inline-block" href="/logout" (click)="logout()">Logout</a>
+    <a *ngIf="app.authenticated" class="py-2 d-none d-md-inline-block" routerLink="/car-list">Account</a>
+    <a *ngIf="!app.authenticated" class="py-2 d-none d-md-inline-block" routerLink="/login">Login</a>
+    <a *ngIf="app.authenticated" class="py-2 d-none d-md-inline-block" href="/logout" (click)="logout()">Logout</a>
   </div>
 </nav>
 <!--The content below is only a placeholder and can be replaced.-->

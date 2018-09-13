@@ -12,14 +12,13 @@ import {catchError, map, tap} from "rxjs/operators";
 @Injectable()
 export class AppService {
 
-  authenticated = false;
+  public authenticated = false;
 
   constructor(private http: HttpClient) {
   }
 
   login(username: string, password: string) {
-    console.log("LAppService onSubmit", username, password);
-
+    console.log("AppService login", username, password);
 
     var headers = new HttpHeaders();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -35,6 +34,7 @@ export class AppService {
         (res) => {
           console.log("token=" + res.headers.get("token"));
           localStorage.setItem('token', res.headers.get("token"));
+          this.authenticated = true;
         }
 
       );
@@ -43,6 +43,7 @@ export class AppService {
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('token');
+    this.authenticated = false;
   }
 
 }
