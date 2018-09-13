@@ -8,7 +8,7 @@ import {AppService} from "./app.service";
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'Home page';
+
   constructor(private app: AppService, private http: HttpClient, private router: Router) {
   }
 

@@ -1,3 +1,147 @@
 <br><br>
 
-Trade
+<div class="row">
+  <div class="col-2" style="padding-left:50px;">
+
+    <div class="order-md-2 mb-4">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Exchange</span>
+        <span class="badge badge-secondary badge-pill">2</span>
+      </h4>
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between bg-light">
+          <div>
+            <h6 class="my-0"><a class="py-2 d-none d-md-inline-block" routerLink="/bitmex">Bitmex</a></h6>
+            <!--<small class="text-muted">Brief description</small>-->
+          </div>
+          <span class="text-muted"></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0">Bitfinex</h6>
+          </div>
+          <span class="text-muted"></span>
+        </li>
+      </ul>
+
+      <div class="order-md-2 mb-4">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-muted">Ticker</span>
+          <span class="badge badge-secondary badge-pill">2</span>
+        </h4>
+        <ul class="list-group mb-3">
+          <li class="list-group-item d-flex justify-content-between bg-light">
+            <div>
+              <h6 class="my-0"><a class="py-2 d-none d-md-inline-block" routerLink="/bitmex/xbt_usd">XBT USD</a></h6>
+            </div>
+            <span class="text-muted">6600</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between lh-condensed">
+            <div>
+              <h6 class="my-0">ETH USD</h6>
+            </div>
+            <span class="text-muted">220</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-8">
+    <!-- TradingView Widget BEGIN -->
+    <div id="technical-analysis"></div>
+    <!-- TradingView Widget END -->
+
+    <span>Positions</span>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Pair</th>
+        <th>Amount</th>
+        <th>Laverage</th>
+        <th>Open price</th>
+        <th>Close price</th>
+        <th>Stop loss</th>
+        <th>Take profit</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>@position.getPair</td>
+        <td>@position.getOpenMoneyAmount</td>
+        <td>@position.getLaverage</td>
+        <td>@position.getOpenPrice</td>
+        <td>@position.getCurrentClosePrice</td>
+        <td>@position.getCryptoExchangeStopLossPrice</td>
+        <td>@position.getTakeProfitPrice</td>
+      </tr>
+      </tbody>
+    </table>
+
+
+
+    <span>Order book</span>
+    <div class="row">
+      <div class="col-sm-6">
+        Sell orders:
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Price</th>
+            <th>Amount</th>
+            <th>Total cost(USD)</th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="col-sm-6">
+        Buy orders:
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Price</th>
+            <th>Amount</th>
+            <th>Total cost(USD)</th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="pre-scrollable">
+        <div class="col-sm-6">
+          <table class="table table-striped">
+            <tbody>
+            <tr>
+              <td>@order.getPrice</td>
+              <td>@order.getAmount</td>
+              <td>@order.getTotalCost</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-sm-6">
+          <table class="table table-striped">
+            <tbody>
+            <tr>
+              <td>@order.getPrice</td>
+              <td>@order.getAmount</td>
+              <td>@order.getTotalCost</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+</div>
+
