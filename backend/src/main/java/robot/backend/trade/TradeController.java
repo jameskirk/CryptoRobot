@@ -8,10 +8,12 @@ import robot.backend.trade.exchange.CexIoCryptoExchange;
 import robot.backend.trade.exchange.CryptoExchange;
 import robot.backend.trade.exchange.MockCryptoExchange;
 import robot.backend.trade.model.internal.*;
+import robot.backend.trade.model.rest.TickerName;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -22,6 +24,12 @@ public class TradeController {
     private List<CryptoExchange> cryptoExchangeList = Arrays.asList(
             new MockCryptoExchange(CryptoExchangeName.Bitfinex), new CexIoCryptoExchange());
 
+    @RequestMapping(value = "/ticker_names")
+    @ResponseBody
+    public Collection<TickerName> tickerNames() {
+        return Arrays.asList(new TickerName("Bitmex","BTC", "USDT"),
+                new TickerName("Bitfinex", "ETC", "USD"));
+    }
 
     @RequestMapping("/info")
     @ResponseBody

@@ -2,6 +2,7 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import { AppService } from '../app.service';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import { Router } from '@angular/router';
+import {TickerName} from "../model/ticker.name";
 
 declare const TradingView: any;
 @Component({
@@ -11,11 +12,34 @@ declare const TradingView: any;
 
 
 
-export class TradeComponent implements AfterViewInit {
+export class TradeComponent implements  OnInit, AfterViewInit {
+
+  tickerNames: Array<TickerName>;
+
+  exchanges: Array<String> = new Array<String>();
+
+  selectedExchange: String;
 
 
   constructor(private app: AppService, private http: HttpClient, private router: Router) {
     console.log("Trade Component constructor");
+  }
+
+  getTickerNames() {
+    return this.http.get<Array<TickerName>>(`http://localhost:8080/ticker_names`);
+  }
+
+  ngOnInit() {
+    this.getTickerNames().pipe().subscribe(data => {
+      this.tickerNames = data;
+      for (const t of this.tickerNames) {
+        if (this.exchanges.indexOf(t.exchange) == -1) {
+          this.exchanges.push(t.exchange);
+        }
+        this.selectedExchange = this.exchanges[0];
+        console.log(`Ticker: '${t.exchange}' : '${t.ticker1}' / '${t.ticker2}' `);
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -41,5 +65,7 @@ export class TradeComponent implements AfterViewInit {
       'popup_height': '650'
     });
   }
+
+
 
 }
