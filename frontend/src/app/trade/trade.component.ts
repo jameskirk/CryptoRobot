@@ -20,6 +20,9 @@ export class TradeComponent implements  OnInit, AfterViewInit {
 
   selectedExchange: String;
 
+  tickers: Array<String> = new Array<String>();
+
+  selectedTicker: String;
 
   constructor(private app: AppService, private http: HttpClient, private router: Router) {
     console.log("Trade Component constructor");
@@ -32,14 +35,26 @@ export class TradeComponent implements  OnInit, AfterViewInit {
   ngOnInit() {
     this.getTickerNames().pipe().subscribe(data => {
       this.tickerNames = data;
+
       for (const t of this.tickerNames) {
         if (this.exchanges.indexOf(t.exchange) == -1) {
           this.exchanges.push(t.exchange);
         }
-        this.selectedExchange = this.exchanges[0];
         console.log(`Ticker: '${t.exchange}' : '${t.ticker1}' / '${t.ticker2}' `);
       }
+
+      this.selectedExchange = this.exchanges[0];
+
+      for (const t of this.tickerNames) {
+        if (t.exchange == this.selectedExchange) {
+          this.tickers.push(t.ticker1 + t.ticker2);
+        }
+      }
+      this.selectedTicker = this.tickers[0];
+
     });
+
+
   }
 
   ngAfterViewInit() {
@@ -48,7 +63,7 @@ export class TradeComponent implements  OnInit, AfterViewInit {
       "width": '100%',
       "height": '610',
       'symbol': 'BTCUSD',
-      'interval': '120',
+      'interval': '60',
       'timezone': 'exchange',
       'theme': 'Light',
       'style': '1',
