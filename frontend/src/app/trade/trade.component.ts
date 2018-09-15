@@ -1,7 +1,7 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { AppService } from '../app.service';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TickerName} from "../model/ticker.name";
 
 declare const TradingView: any;
@@ -12,7 +12,7 @@ declare const TradingView: any;
 
 
 
-export class TradeComponent implements  OnInit, AfterViewInit {
+export class TradeComponent implements  OnInit, AfterViewInit, OnChanges {
 
   tickerNames: Array<TickerName>;
 
@@ -20,11 +20,13 @@ export class TradeComponent implements  OnInit, AfterViewInit {
 
   selectedExchange: String;
 
-  tickers: Array<String> = new Array<String>();
+  tickersOfSelectedExchange: Array<TickerName> = new Array<TickerName>();
 
-  selectedTicker: String;
+  selectedTickerCurrency1: String;
 
-  constructor(private app: AppService, private http: HttpClient, private router: Router) {
+  selectedTickerCurrency2: String;
+
+  constructor(private app: AppService, private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     console.log("Trade Component constructor");
   }
 
@@ -33,6 +35,10 @@ export class TradeComponent implements  OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    let exchange = this.route.snapshot.paramMap.get('exchange');
+    let currency1 = this.route.snapshot.paramMap.get('currency1');
+    let currency2 = this.route.snapshot.paramMap.get('currency2');
+
     this.getTickerNames().pipe().subscribe(data => {
       this.tickerNames = data;
 
@@ -43,18 +49,33 @@ export class TradeComponent implements  OnInit, AfterViewInit {
         console.log(`Ticker: '${t.exchange}' : '${t.ticker1}' / '${t.ticker2}' `);
       }
 
-      this.selectedExchange = this.exchanges[0];
+      if (exchange != null) {
+        this.selectedExchange = exchange;
+      } else {
+        this.selectedExchange = this.exchanges[0];
+      }
+      console.log(this.selectedExchange);
 
       for (const t of this.tickerNames) {
         if (t.exchange == this.selectedExchange) {
-          this.tickers.push(t.ticker1 + t.ticker2);
+          this.tickersOfSelectedExchange.push(t);
+          console.log("added to tickersOfSelectedExchange"+ t.ticker1 + t.ticker2);
         }
       }
-      this.selectedTicker = this.tickers[0];
+
+      if (currency1 != null && currency2 != null) {
+        this.selectedTickerCurrency1 = currency1;
+        this.selectedTickerCurrency2 = currency2;
+      } else {
+        this.selectedTickerCurrency1 = this.tickerNames[0].ticker1;
+        this.selectedTickerCurrency2 = this.tickerNames[0].ticker2;
+      }
 
     });
+  }
 
-
+  getSelectedTicker() {
+    return '' + this.selectedTickerCurrency1 + this.selectedTickerCurrency2;
   }
 
   ngAfterViewInit() {
@@ -81,6 +102,8 @@ export class TradeComponent implements  OnInit, AfterViewInit {
     });
   }
 
-
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("on changes");
+  }
 
 }

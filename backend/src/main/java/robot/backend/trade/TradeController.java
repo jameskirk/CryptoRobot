@@ -27,10 +27,10 @@ public class TradeController {
     @RequestMapping(value = "/ticker_names")
     @ResponseBody
     public Collection<TickerName> tickerNames() {
-        return Arrays.asList(new TickerName("Bitmex","BTC", "USD"),
-        new TickerName("Bitmex","ETH", "USD"),
-                new TickerName("Bitfinex", "BTC", "USDT"),
-                new TickerName("Bitfinex", "ETC", "USDT"));
+        return Arrays.asList(new TickerName("bitmex","BTC", "USD"),
+        new TickerName("bitmex","ETH", "USD"),
+                new TickerName("bitfinex", "BTC", "USDT"),
+                new TickerName("bitfinex", "ETC", "USDT"));
     }
 
     @RequestMapping("/info")
