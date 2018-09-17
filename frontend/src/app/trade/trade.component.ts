@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { AppService } from '../app.service';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {TickerName} from "../model/ticker.name";
 import {TickerInfo} from "../model/ticker.info";
 
@@ -32,16 +32,21 @@ export class TradeComponent implements  OnInit, AfterViewInit, OnChanges {
 
   constructor(private app: AppService, private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     console.log("Trade Component constructor");
+
+    this.route.params.subscribe(
+      (params : Params) => {
+        this.init(params["exchange"], params["currency1"], params["currency2"]);
+      }
+    );
   }
 
   getTickerNames() {
     return this.http.get<Array<TickerName>>(`http://localhost:8080/get_ticker_names`);
   }
 
-  ngOnInit() {
-    let exchangeFromUrl = this.route.snapshot.paramMap.get('exchange');
-    let currency1FromUrl = this.route.snapshot.paramMap.get('currency1');
-    let currency2FromUrl = this.route.snapshot.paramMap.get('currency2');
+  init(exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl: String) {
+    this.exchanges = [];
+    this.tickersOfSelectedExchange = [];
 
     this.getTickerNames().pipe().subscribe(data => {
       this.tickerNames = data;
@@ -81,6 +86,14 @@ export class TradeComponent implements  OnInit, AfterViewInit, OnChanges {
       this.tickerInfo = data;
       console.log("get_ticker_info: " + data.price);
     });
+  }
+
+  ngOnInit() {
+    let exchangeFromUrl = this.route.snapshot.paramMap.get('exchange');
+    let currency1FromUrl = this.route.snapshot.paramMap.get('currency1');
+    let currency2FromUrl = this.route.snapshot.paramMap.get('currency2');
+
+    //this.init(exchangeFromUrl, currency1FromUrl, currency2FromUrl);
   }
 
   getSelectedTicker() {

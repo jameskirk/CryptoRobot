@@ -21,7 +21,8 @@ public class BitfinexCryptoExhange implements CryptoExchange {
     @Override
     public List<TickerName> getTickers() {
         return Arrays.asList(new TickerName(getExchangeName(), Currency.BTC, Currency.USD),
-                new TickerName(getExchangeName(), Currency.ETH, Currency.USD));
+                new TickerName(getExchangeName(), Currency.ETH, Currency.USD),
+        new TickerName(getExchangeName(), Currency.XRP, Currency.USD));
     }
 
     @Override

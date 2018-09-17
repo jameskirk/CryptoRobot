@@ -1,5 +1,5 @@
 package robot.backend.trade.model.contant;
 
 public enum Currency {
-    BTC, ETH, USD, USDT;
+    BTC, ETH, XRP, USD, USDT;
 }
