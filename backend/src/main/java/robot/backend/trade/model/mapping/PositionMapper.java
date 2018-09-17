@@ -1,6 +1,5 @@
 package robot.backend.trade.model.mapping;
 
-import robot.backend.trade.model.internal.PairType;
 import robot.backend.trade.model.internal.Position;
 import robot.backend.trade.model.dto.CexIoFullPosition;
 
@@ -11,8 +10,9 @@ public class PositionMapper {
     public Position mapFromCexIo(CexIoFullPosition cexIoFullPosition) {
         Position retVal = new Position();
         retVal.setId(cexIoFullPosition.id);
-        String pair = cexIoFullPosition.pair.replace(":", "_");
-        retVal.setPair(PairType.valueOf(pair));
+        //String pair = cexIoFullPosition.pair.replace(":", "_");
+        //TODO
+        //retVal.setTicker(PairType.valueOf(pair));
         retVal.setOpenMoneyAmount(new BigDecimal(cexIoFullPosition.omamount));
         retVal.setLaverage(new BigDecimal(cexIoFullPosition.leverage));
         retVal.setOpenPrice(new BigDecimal(cexIoFullPosition.oprice));

@@ -1,11 +1,12 @@
 package robot.backend.trade.exchange;
 
-import robot.backend.trade.RestHelper;
-import robot.backend.trade.model.dto.BitfinexPrice;
+import robot.backend.trade.util.RestHelper;
 import robot.backend.trade.model.contant.CryptoExchangeName;
-import robot.backend.trade.model.internal.OrderBook;
-import robot.backend.trade.model.internal.PairType;
-import robot.backend.trade.model.internal.Position;
+import robot.backend.trade.model.contant.Currency;
+import robot.backend.trade.model.dto.BitfinexPrice;
+import robot.backend.trade.model.rest.OrderBook;
+import robot.backend.trade.model.rest.TickerName;
+import robot.backend.trade.model.rest.TradeHistoryEntity;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -13,31 +14,30 @@ import java.util.List;
 
 public class BitfinexCryptoExhange implements CryptoExchange {
     @Override
-    public CryptoExchangeName getName() {
+    public CryptoExchangeName getExchangeName() {
         return CryptoExchangeName.bitfinex;
     }
 
     @Override
-    public BigDecimal getPrice(PairType pairType) throws Exception {
-        BitfinexPrice bitfinex = new RestHelper().mapDtoFromUrl("https://api.bitfinex.com/v1/pubticker/" + pairType.getCurrency1() + pairType.getCurrency2(), BitfinexPrice.class);
+    public List<TickerName> getTickers() {
+        return Arrays.asList(new TickerName(getExchangeName(), Currency.BTC, Currency.USD),
+                new TickerName(getExchangeName(), Currency.ETH, Currency.USD));
+    }
+
+    @Override
+    public BigDecimal getPrice(TickerName ticker) throws Exception {
+        BitfinexPrice bitfinex = new RestHelper().mapDtoFromUrl("https://api.bitfinex.com/v1/pubticker/" + ticker.getCurrency1() + ticker.getCurrency2(), BitfinexPrice.class);
         return new BigDecimal(bitfinex.last_price);
     }
 
     @Override
-    public List<Position> getOpenPosition(PairType pairType) throws Exception {
-        return null;
+    public OrderBook getOrderBook(TickerName pairType) throws Exception {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<PairType> getPairs() throws Exception {
-        return Arrays.asList(PairType.BTC_USD, PairType.ETH_USD);
+    public List<TradeHistoryEntity> getTradeHistory(TickerName pairType) throws Exception {
+        throw new UnsupportedOperationException();
     }
-
-    @Override
-    public OrderBook getOrderBook(PairType pairType) throws Exception {
-        OrderBook retVal = new OrderBook();
-        return retVal;
-    }
-
 
 }

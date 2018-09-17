@@ -3,50 +3,53 @@ package robot.backend.trade;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import robot.backend.trade.exchange.BitfinexCryptoExhange;
 import robot.backend.trade.exchange.CryptoExchange;
 import robot.backend.trade.exchange.MockCryptoExchange;
 import robot.backend.trade.model.contant.CryptoExchangeName;
+import robot.backend.trade.model.contant.Currency;
 import robot.backend.trade.model.rest.TickerInfo;
 import robot.backend.trade.model.rest.TickerName;
-import robot.backend.trade.model.rest.TradeHistoryEntity;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
 public class TradeController {
 
-    private Map<String, CryptoExchange> cryptoExchangeList = new HashMap<>();
+    private Map<CryptoExchangeName, CryptoExchange> cryptoExchangeList = new HashMap<>();
 
     public TradeController() {
-        cryptoExchangeList.put("bitmex", new MockCryptoExchange(CryptoExchangeName.bitmex));
-        cryptoExchangeList.put("bitfinex", new MockCryptoExchange(CryptoExchangeName.bitfinex));
+        cryptoExchangeList.put(CryptoExchangeName.mock, new MockCryptoExchange(CryptoExchangeName.bitmex, Arrays.asList(new TickerName(robot.backend.trade.model.contant.Currency.BTC, robot.backend.trade.model.contant.Currency.USD),
+                new TickerName(robot.backend.trade.model.contant.Currency.ETH, Currency.USD))));
+
+        cryptoExchangeList.put(CryptoExchangeName.bitmex, new BitfinexCryptoExhange());
     }
 
     @RequestMapping(value = "/get_ticker_names")
     @ResponseBody
     public Collection<TickerName> getTickerNames() {
-        return Arrays.asList(new TickerName("bitmex","BTC", "USD"),
-        new TickerName("bitmex","ETH", "USD"),
-                new TickerName("bitfinex", "BTC", "USDT"),
-                new TickerName("bitfinex", "ETC", "USDT"));
+        List<TickerName> retVal = new ArrayList<>();
+        for (Map.Entry<CryptoExchangeName, CryptoExchange> entry: cryptoExchangeList.entrySet()) {
+            for (TickerName ticker: entry.getValue().getTickers()) {
+                retVal.add(new TickerName(entry.getKey(), ticker.getCurrency1(), ticker.getCurrency2()));
+            }
+
+        }
+        return retVal;
     }
 
     @RequestMapping(value = "/get_ticker_info")
     @ResponseBody
-    public TickerInfo getTickerInfo() {
+    public TickerInfo getTickerInfo() throws Exception {
+        CryptoExchangeName cryptoExchangeNameFromInput = CryptoExchangeName.mock;
+        TickerName tickerNameFromInput = new TickerName(Currency.BTC, Currency.USD);
+
         TickerInfo retVal = new TickerInfo();
-        // TODO parse param 'ticker'
-        int randomInt = ThreadLocalRandom.current().nextInt(0, 10 + 1);
-        retVal.setPrice(new BigDecimal(6000+randomInt));
-        for (int i =0; i< getRand(); i++) {
-            retVal.getOrderBook().getAsk().add(new robot.backend.trade.model.rest.OrderBook.OrderBookEntity(new BigDecimal(6000+getRand()*2), new BigDecimal(getRand()*1.23)));
-            retVal.getOrderBook().getBid().add(new robot.backend.trade.model.rest.OrderBook.OrderBookEntity(new BigDecimal(6000-getRand()*2), new BigDecimal(getRand()*1.47)));
-        }
-        for (int i =0; i< getRand(); i++) {
-            retVal.getTradeHistory().add(new TradeHistoryEntity("sell", new BigDecimal(getRand() * 0.45), new BigDecimal(6000 + getRand() * 1.2), new Date()));
-        }
+        CryptoExchange cryptoExchange = cryptoExchangeList.get(cryptoExchangeNameFromInput);
+        retVal.setPrice(cryptoExchange.getPrice(tickerNameFromInput));
+        retVal.setOrderBook(cryptoExchange.getOrderBook(tickerNameFromInput));
+        retVal.setTradeHistory(cryptoExchange.getTradeHistory(tickerNameFromInput));
         return retVal;
     }
 
@@ -73,7 +76,7 @@ public class TradeController {
 //
 //            CryptoExchange cryptoExchange = null;
 //            for (CryptoExchange ce : cryptoExchangeList) {
-//                if (ce.getName().equals(cryptoExchangeName)) {
+//                if (ce.getExchangeName().equals(cryptoExchangeName)) {
 //                    cryptoExchange = ce;
 //                }
 //            }
@@ -87,7 +90,7 @@ public class TradeController {
 //            tradeBean.setPairType(pair);
 //            List<CryptoExchangeName> cryptoExchangeNames = new ArrayList<>();
 //            for (CryptoExchange ce : cryptoExchangeList) {
-//                cryptoExchangeNames.add(ce.getName());
+//                cryptoExchangeNames.add(ce.getExchangeName());
 //            }
 //            tradeBean.setCryptoExchangeNameList(cryptoExchangeNames);
 //

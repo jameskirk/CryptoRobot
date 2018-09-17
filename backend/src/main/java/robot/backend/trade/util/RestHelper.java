@@ -1,4 +1,4 @@
-package robot.backend.trade;
+package robot.backend.trade.util;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

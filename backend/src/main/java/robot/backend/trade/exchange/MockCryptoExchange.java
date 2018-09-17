@@ -1,97 +1,61 @@
 package robot.backend.trade.exchange;
 
 import robot.backend.trade.model.contant.CryptoExchangeName;
-import robot.backend.trade.model.internal.*;
+import robot.backend.trade.model.rest.OrderBook;
+import robot.backend.trade.model.rest.TickerName;
+import robot.backend.trade.model.rest.TradeHistoryEntity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MockCryptoExchange implements CryptoExchange {
 
     private CryptoExchangeName name;
 
-    public MockCryptoExchange(CryptoExchangeName name) {
+    private List<TickerName> tickers;
+
+    public MockCryptoExchange(CryptoExchangeName name, List<TickerName> tickers) {
         this.name = name;
+        this.tickers = tickers;
     }
 
-    public CryptoExchangeName getName() {
+    public CryptoExchangeName getExchangeName() {
         return  name;
     }
 
     @Override
-    public BigDecimal getPrice(PairType pairType) throws Exception {
-        if (pairType == PairType.BTC_USD) {
-            return new BigDecimal(6423);
-        } else {
-            return new BigDecimal(454);
-        }
+    public List<TickerName> getTickers() {
+        return tickers;
     }
 
     @Override
-    public List<Position> getOpenPosition(PairType pairType) throws Exception {
-        List<Position> retVal = new ArrayList<>();
-        if (pairType == PairType.BTC_USD) {
-            Position position = new Position();
-            position.setPair(pairType);
-            position.setType(PositionType.LONG);
-            position.setOpenMoneyAmount(new BigDecimal(150));
-            position.setLaverage(new BigDecimal(2));
-            position.setFee(new BigDecimal(3.40));
-            position.setOpenPrice(new BigDecimal(6310));
-            position.setCurrentClosePrice(new BigDecimal(6423));
-            retVal.add(position);
-
-        } else if (pairType == PairType.ETH_USD) {
-            Position position = new Position();
-            position.setPair(pairType);
-            position.setType(PositionType.LONG);
-            position.setOpenMoneyAmount(new BigDecimal(457));
-            position.setLaverage(new BigDecimal(2));
-            position.setFee(new BigDecimal(1.42));
-            position.setOpenPrice(new BigDecimal(437));
-            position.setCurrentClosePrice(new BigDecimal("452.31"));
-            retVal.add(position);
-
-            Position position2 = new Position();
-            position2.setPair(pairType);
-            position2.setType(PositionType.LONG);
-            position2.setOpenMoneyAmount(new BigDecimal(521));
-            position2.setLaverage(new BigDecimal(2));
-            position2.setFee(new BigDecimal(7.22));
-            position2.setOpenPrice(new BigDecimal(439));
-            position2.setCurrentClosePrice(new BigDecimal("452.34"));
-            retVal.add(position2);
-        }
-        return retVal;
+    public BigDecimal getPrice(TickerName ticker) throws Exception {
+        return (new BigDecimal(6000 + getRand()*4.5));
     }
 
     @Override
-    public List<PairType> getPairs() throws Exception {
-        return Arrays.asList(PairType.BTC_USD, PairType.ETH_USD);
-    }
-
-    @Override
-    public OrderBook getOrderBook(PairType pairType) throws Exception {
+    public OrderBook getOrderBook(TickerName pairType) throws Exception {
         OrderBook retVal = new OrderBook();
-        Order order = new Order();
-        order.setAmount(new BigDecimal("123.1"));
-        order.setPrice(new BigDecimal(6201));
-        order.setTotalCost(new BigDecimal("2414"));
-        retVal.getSellOrders().add(order);
-
-        Order order3 = new Order();
-        order3.setAmount(new BigDecimal("126.1"));
-        order3.setPrice(new BigDecimal(6203));
-        order.setTotalCost(new BigDecimal("2524"));
-        retVal.getSellOrders().add(order3);
-
-        Order order2 = new Order();
-        order2.setAmount(new BigDecimal("243.1"));
-        order2.setPrice(new BigDecimal(6197));
-        order.setTotalCost(new BigDecimal("2315"));
-        retVal.getBuyOrders().add(order2);
+        for (int i =0; i< getRand(); i++) {
+            retVal.getAsk().add(new robot.backend.trade.model.rest.OrderBook.OrderBookEntity(new BigDecimal(6000+getRand()*2), new BigDecimal(getRand()*1.23)));
+            retVal.getBid().add(new robot.backend.trade.model.rest.OrderBook.OrderBookEntity(new BigDecimal(6000-getRand()*2), new BigDecimal(getRand()*1.47)));
+        }
         return retVal;
+    }
+
+    @Override
+    public List<TradeHistoryEntity> getTradeHistory(TickerName pairType) throws Exception {
+        List<TradeHistoryEntity> retVal = new ArrayList<>();
+        for (int i =0; i< getRand()*1.4; i++) {
+            retVal.add(new TradeHistoryEntity("sell", new BigDecimal(getRand() * 0.45), new BigDecimal(6000 + getRand() * 1.2), new Date()));
+        }
+        return retVal;
+    }
+
+    private int getRand() {
+        return ThreadLocalRandom.current().nextInt(4, 10 + 1);
     }
 }

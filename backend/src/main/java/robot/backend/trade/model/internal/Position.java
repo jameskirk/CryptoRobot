@@ -1,10 +1,13 @@
 package robot.backend.trade.model.internal;
 
+import robot.backend.trade.model.contant.PositionType;
+import robot.backend.trade.model.rest.TickerName;
+
 import java.math.BigDecimal;
 
 public class Position {
     String id;
-    PairType pair;
+    TickerName ticker;
     PositionType type;
     BigDecimal openMoneyAmount;
     BigDecimal totalPositionAmount;
@@ -28,12 +31,12 @@ public class Position {
         this.id = id;
     }
 
-    public PairType getPair() {
-        return pair;
+    public TickerName getTicker() {
+        return ticker;
     }
 
-    public void setPair(PairType pair) {
-        this.pair = pair;
+    public void setTicker(TickerName ticker) {
+        this.ticker = ticker;
     }
 
     public PositionType getType() {
