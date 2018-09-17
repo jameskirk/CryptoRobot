@@ -1,5 +1,7 @@
 package robot.backend.trade.model.internal;
 
+import robot.backend.trade.model.contant.OrderType;
+
 import java.math.BigDecimal;
 
 public class Order {

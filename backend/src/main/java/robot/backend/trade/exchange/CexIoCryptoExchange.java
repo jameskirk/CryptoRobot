@@ -1,6 +1,7 @@
 package robot.backend.trade.exchange;
 
 import robot.backend.trade.RestHelper;
+import robot.backend.trade.model.contant.CryptoExchangeName;
 import robot.backend.trade.model.dto.CexIoLastPrice;
 import robot.backend.trade.model.dto.CexIoOrderBook;
 import robot.backend.trade.model.internal.*;
@@ -19,7 +20,7 @@ import java.util.List;
 public class CexIoCryptoExchange implements CryptoExchange {
 
     public CryptoExchangeName getName() {
-        return  CryptoExchangeName.CexIo;
+        return  CryptoExchangeName.cexio;
     }
 
     private RestHelper restHelper = new RestHelper();

@@ -2,7 +2,7 @@ package robot.backend.trade.exchange;
 
 import robot.backend.trade.RestHelper;
 import robot.backend.trade.model.dto.BitfinexPrice;
-import robot.backend.trade.model.internal.CryptoExchangeName;
+import robot.backend.trade.model.contant.CryptoExchangeName;
 import robot.backend.trade.model.internal.OrderBook;
 import robot.backend.trade.model.internal.PairType;
 import robot.backend.trade.model.internal.Position;
@@ -14,7 +14,7 @@ import java.util.List;
 public class BitfinexCryptoExhange implements CryptoExchange {
     @Override
     public CryptoExchangeName getName() {
-        return CryptoExchangeName.Bitfinex;
+        return CryptoExchangeName.bitfinex;
     }
 
     @Override

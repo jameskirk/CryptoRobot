@@ -19,7 +19,7 @@ const appRoutes: Routes = [
   { path: 'car-list', canActivate: [AuthGuard], component: CarListComponent },
   { path: 'login', component: LoginComponent},
   { path: 'logout', component: LogoutComponent},
-  { path: 'trade', component: TradeComponent},
+  { path: 'trade', component: TradeComponent, pathMatch: 'full'},
   { path: 'trade/:exchange/:currency1/:currency2', component: TradeComponent, pathMatch: 'full'}
 ];
 

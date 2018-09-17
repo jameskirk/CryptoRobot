@@ -1,6 +1,6 @@
 package robot.backend.trade.model.entity;
 
-import robot.backend.trade.model.internal.CryptoExchangeName;
+import robot.backend.trade.model.contant.CryptoExchangeName;
 
 import javax.persistence.*;
 

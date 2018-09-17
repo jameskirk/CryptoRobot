@@ -80,3 +80,10 @@
 }
 
 .overflow-hidden { overflow: hidden; }
+
+/**
+ * Tables
+ */
+th {
+  font-weight: normal;
+}

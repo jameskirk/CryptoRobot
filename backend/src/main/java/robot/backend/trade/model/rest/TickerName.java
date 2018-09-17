@@ -4,30 +4,30 @@ public class TickerName {
 
     private String exchange;
 
-    private String ticker1;
+    private String currency1;
 
-    private String ticker2;
+    private String currency2;
 
-    public TickerName(String exchange, String ticker1, String ticker2) {
+    public TickerName(String exchange, String currency1, String currency2) {
         this.exchange = exchange;
-        this.ticker1 = ticker1;
-        this.ticker2 = ticker2;
+        this.currency1 = currency1;
+        this.currency2 = currency2;
     }
 
-    public String getTicker1() {
-        return ticker1;
+    public String getCurrency1() {
+        return currency1;
     }
 
-    public void setTicker1(String ticker1) {
-        this.ticker1 = ticker1;
+    public void setCurrency1(String currency1) {
+        this.currency1 = currency1;
     }
 
-    public String getTicker2() {
-        return ticker2;
+    public String getCurrency2() {
+        return currency2;
     }
 
-    public void setTicker2(String ticker2) {
-        this.ticker2 = ticker2;
+    public void setCurrency2(String currency2) {
+        this.currency2 = currency2;
     }
 
     public String getExchange() {

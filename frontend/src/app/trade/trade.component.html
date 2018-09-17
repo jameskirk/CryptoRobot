@@ -23,9 +23,9 @@
           <span class="badge badge-secondary badge-pill">{{tickersOfSelectedExchange.length}}</span>
         </h4>
         <ul class="list-group mb-3">
-          <li *ngFor="let ticker of tickersOfSelectedExchange" [ngClass]="(ticker.ticker1 == selectedTickerCurrency1 && ticker.ticker2 == selectedTickerCurrency2 ) ? 'list-group-item d-flex justify-content-between bg-dark' : 'list-group-item d-flex justify-content-between lh-condensed'">
+          <li *ngFor="let ticker of tickersOfSelectedExchange" [ngClass]="(ticker.currency1 == selectedTickerCurrency1 && ticker.currency2 == selectedTickerCurrency2 ) ? 'list-group-item d-flex justify-content-between bg-dark' : 'list-group-item d-flex justify-content-between lh-condensed'">
             <div>
-              <h6 class="my-0"><a class="py-2 d-none d-md-inline-block" routerLink="/trade/{{selectedExchange}}/{{ticker.ticker1}}/{{ticker.ticker2}}">{{ticker.ticker1 + ticker.ticker2}}</a></h6>
+              <h6 class="my-0"><a class="py-2 d-none d-md-inline-block" routerLink="/trade/{{selectedExchange}}/{{ticker.currency1}}/{{ticker.currency2}}">{{ticker.currency1}} {{ticker.currency2}}</a></h6>
             </div>
             <span class="text-muted">6600</span>
           </li>
@@ -36,10 +36,21 @@
   </div>
 
   <div class="col-8">
-    <!-- TradingView Widget BEGIN -->
-    <div id="technical-analysis"></div>
-    <!-- TradingView Widget END -->
 
+    <div class="card mb-4 box-shadow">
+      <div class="card-header">
+        <h4 class="my-0 font-weight-normal">Chart</h4>
+      </div>
+      <div class="card-body">
+        <!-- TradingView Widget BEGIN -->
+        <div id="technical-analysis"></div>
+        <!-- TradingView Widget END -->
+      </div>
+    </div>
+
+
+
+    <!--
     <span>Positions</span>
     <table class="table table-striped">
       <thead>
@@ -64,70 +75,72 @@
         <td>@position.getTakeProfitPrice</td>
       </tr>
       </tbody>
-    </table>
+    </table> -->
 
-
-
-    <span>Order book</span>
     <div class="row">
-      <div class="col-sm-6">
-        Sell orders:
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Price</th>
-            <th>Amount</th>
-            <th>Total cost(USD)</th>
-          </tr>
-          </thead>
-        </table>
+      <div class="col">
+
+    <div class="card mb-4 box-shadow">
+      <div class="card-header">
+        <h4 class="my-0 font-weight-normal">Order book</h4>
       </div>
-      <div class="col-sm-6">
-        Buy orders:
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Price</th>
-            <th>Amount</th>
-            <th>Total cost(USD)</th>
-          </tr>
-          </thead>
-        </table>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            Sell orders:
+            <table class="table table-striped">
+              <thead>
+              <tr *ngFor="let orderBookEntity of tickerInfo?.orderBook?.ask">
+                <th>{{orderBookEntity?.price}}</th>
+                <th>{{orderBookEntity?.amount}}</th>
+              </tr>
+              </thead>
+            </table>
+          </div>
+          <div class="col-sm-6">
+            Buy orders:
+            <table class="table table-striped">
+              <thead>
+              <tr *ngFor="let orderBookEntity of tickerInfo?.orderBook?.bid">
+                <th>{{orderBookEntity?.price}}</th>
+                <th>{{orderBookEntity?.amount}}</th>
+              </tr>
+              </thead>
+            </table>
+          </div>
       </div>
     </div>
-    <div class="row">
-      <div class="pre-scrollable">
-        <div class="col-sm-6">
-          <table class="table table-striped">
-            <tbody>
-            <tr>
-              <td>@order.getPrice</td>
-              <td>@order.getAmount</td>
-              <td>@order.getTotalCost</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="col-sm-6">
-          <table class="table table-striped">
-            <tbody>
-            <tr>
-              <td>@order.getPrice</td>
-              <td>@order.getAmount</td>
-              <td>@order.getTotalCost</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-
-
   </div>
 
+      </div>
 
+      <div class="col">
 
+      <div class="card mb-4 box-shadow">
+        <div class="card-header">
+          <h4 class="my-0 font-weight-normal">Recent Trades</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-6">
+              <table class="table table-striped">
+                <thead>
+                <tr *ngFor="let tradeHistory of tickerInfo?.tradeHistory">
+                  <th>{{tradeHistory?.price}}</th>
+                  <th>{{tradeHistory?.amount}}</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    </div>
+
+  </div>
 
 
 </div>
