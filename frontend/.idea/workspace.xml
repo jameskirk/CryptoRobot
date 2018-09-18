@@ -15,8 +15,8 @@
       <file leaf-file-name="trade.component.ts" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/app/trade/trade.component.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="690">
-              <caret line="95" column="6" selection-start-line="95" selection-start-column="6" selection-end-line="95" selection-end-column="6" />
+            <state relative-caret-position="1222">
+              <caret line="112" column="3" selection-start-line="112" selection-start-column="3" selection-end-line="112" selection-end-column="3" />
               <folding>
                 <element signature="e#0#89#0" expanded="true" />
               </folding>
@@ -377,12 +377,12 @@
       <workItem from="1536111171986" duration="22000" />
       <workItem from="1536605875569" duration="17406000" />
       <workItem from="1536875106583" duration="11582000" />
-      <workItem from="1537024177497" duration="17424000" />
+      <workItem from="1537024177497" duration="19806000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65329000" />
+    <option name="totallyTimeSpent" value="67711000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -744,8 +744,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/trade/trade.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="95" column="6" selection-start-line="95" selection-start-column="6" selection-end-line="95" selection-end-column="6" />
+        <state relative-caret-position="1222">
+          <caret line="112" column="3" selection-start-line="112" selection-start-column="3" selection-end-line="112" selection-end-column="3" />
           <folding>
             <element signature="e#0#89#0" expanded="true" />
           </folding>
