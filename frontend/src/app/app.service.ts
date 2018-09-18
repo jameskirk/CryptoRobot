@@ -1,20 +1,26 @@
 import { Injectable } from '@angular/core';
 import {
   HttpClient,
-  HttpErrorResponse,
-  HttpHeaderResponse,
   HttpHeaders,
   HttpParams,
-  HttpResponse
 } from '@angular/common/http';
-import {catchError, map, tap} from "rxjs/operators";
+import {Constant} from "./model/constant";
+
+//(window as any).global = window;
 
 @Injectable()
 export class AppService {
 
-  public authenticated = false;
+  private authenticated: boolean;
 
   constructor(private http: HttpClient) {
+    console.log("AppService constructor");
+    //TODO: call backend:ping with token
+    this.authenticated = localStorage.getItem('token') != null;
+  }
+
+  isAuthenticated():boolean {
+    return this.authenticated;
   }
 
   login(username: string, password: string) {
@@ -28,15 +34,13 @@ export class AppService {
     body = body.set('username', username);
     body = body.set('password', password);
 
-    this.http.post(`http://localhost:8080/login`, body, {headers:headers,observe: 'response' })
+    this.http.post(Constant.restApiUrl + `/login`, body, {headers: headers, observe: 'response'})
       .subscribe(
-
         (res) => {
           console.log("token=" + res.headers.get("token"));
           localStorage.setItem('token', res.headers.get("token"));
           this.authenticated = true;
         }
-
       );
   }
 

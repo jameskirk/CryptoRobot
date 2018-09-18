@@ -13,9 +13,10 @@ import {JwtInterceptor} from "./jwt.interceptor";
 import {LogoutComponent} from "./security/logout.component";
 import {AuthGuard} from "./auth.guard";
 import {TradeComponent} from "./trade/trade.component";
+import {HomeComponent} from "./misc/home.component";
 
 const appRoutes: Routes = [
-  {path: '', redirectTo: '/', pathMatch: 'full'},
+  {path: '', component: HomeComponent, pathMatch: 'full'},
   { path: 'car-list', canActivate: [AuthGuard], component: CarListComponent },
   { path: 'login', component: LoginComponent},
   { path: 'logout', component: LogoutComponent},
@@ -28,6 +29,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     LoginComponent,
     LogoutComponent,
     CarListComponent,
@@ -36,7 +38,7 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes, { enableTracing: true}),
+    RouterModule.forRoot(appRoutes, { enableTracing: false}),
     FormsModule
   ],
   exports: [

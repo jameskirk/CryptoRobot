@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls : ['./login.component.css']
 })
 export class LoginComponent {
 
@@ -15,12 +16,16 @@ export class LoginComponent {
     console.log("Login Component constructor");
   }
 
-  onSubmit() {
+  async onSubmit() {
     console.log("Login Component onSubmit");
     this.app.login(this.credentials.username, this.credentials.password);
-
+    // TODO: remove delay and make app.login - wait REST response
+    await this.delay(1000);
     return this.router.navigateByUrl('/trade');
 
+  }
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
 }

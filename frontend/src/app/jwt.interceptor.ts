@@ -13,9 +13,9 @@ export class JwtInterceptor implements HttpInterceptor {
     // add authorization header with jwt token if available
     let currentUser = localStorage.getItem('token');
     console.log("interceptor, token =" + currentUser);
-    if (currentUser ) {
+    if (currentUser) {
       //TODO: we must validate token and set 'authenticated' -call REST service ping with token.
-      this.inj.get(AppService).authenticated = true;
+      //this.inj.get(AppService).authenticated = true;
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${currentUser}`

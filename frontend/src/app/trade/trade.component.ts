@@ -8,6 +8,7 @@ import {Observable, Subscribable} from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
 import {Subscription} from "rxjs/Subscription";
+import {Constant} from "../model/constant";
 
 declare const TradingView: any;
 @Component({
@@ -46,13 +47,19 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
     );
   }
 
-  init(exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl) {
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
+  async init(exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl) {
     this.exchanges = [];
     this.tickersOfSelectedExchange = [];
 
+    //await this.delay(3000);
+
     Observable.forkJoin(
-      this.http.get<Array<TickerName>>(`http://localhost:8080/get_ticker_names`).map((response:Array<TickerName>) => response),
-      this.http.get<TickerInfo>(`http://localhost:8080/get_ticker_info`).map((response:TickerInfo) => response)
+      this.http.get<Array<TickerName>>(Constant.restApiUrl +`/get_ticker_names`).map((response: Array<TickerName>) => response),
+      this.http.get<TickerInfo>(Constant.restApiUrl +`/get_ticker_info`).map((response: TickerInfo) => response)
     ).subscribe(
       data => {
         this.tickerNames = data[0];
@@ -62,7 +69,7 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
           'container_id': 'technical-analysis',
           "width": '100%',
           "height": '500',
-          'symbol': ''+this.selectedTickerCurrency1 + this.selectedTickerCurrency2,
+          'symbol': '' + this.selectedTickerCurrency1 + this.selectedTickerCurrency2,
           'interval': '60',
           'timezone': 'exchange',
           'theme': 'Light',
@@ -74,7 +81,7 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
           'save_image': false,
           'hideideas': true,
           'studies': [
-            'MASimple@tv-basicstudies' ],
+            'MASimple@tv-basicstudies'],
           'show_popup_button': true,
           'popup_width': '1000',
           'popup_height': '650'
@@ -85,7 +92,7 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
   }
 
   refresh(exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl) {
-    this.http.get<TickerInfo>(`http://localhost:8080/get_ticker_info`).map((response:TickerInfo) => response).subscribe(
+    this.http.get<TickerInfo>(Constant.restApiUrl +`/get_ticker_info`).map((response:TickerInfo) => response).subscribe(
       data => {
         this.tickerInfo = data;
       }
@@ -93,6 +100,7 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
   }
 
   handleTickerNames(tickerNames:Array<TickerName>,exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl: String) {
+    console.log("URL params:"+exchangeFromUrl+ currency2FromUrl+ currency1FromUrl)
     for (const t of this.tickerNames) {
       if (this.exchanges.indexOf(t.exchange) == -1) {
         this.exchanges.push(t.exchange);
