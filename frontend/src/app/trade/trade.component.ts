@@ -8,7 +8,7 @@ import {Observable, Subscribable} from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
 import {Subscription} from "rxjs/Subscription";
-import {Constant} from "../model/constant";
+import {environment} from "../../environments/environment";
 
 declare const TradingView: any;
 @Component({
@@ -58,8 +58,8 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
     //await this.delay(3000);
 
     Observable.forkJoin(
-      this.http.get<Array<TickerName>>(Constant.restApiUrl +`/get_ticker_names`).map((response: Array<TickerName>) => response),
-      this.http.get<TickerInfo>(Constant.restApiUrl +`/get_ticker_info`).map((response: TickerInfo) => response)
+      this.http.get<Array<TickerName>>(environment.restApiUrl +`/get_ticker_names`).map((response: Array<TickerName>) => response),
+      this.http.get<TickerInfo>(environment.restApiUrl +`/get_ticker_info`).map((response: TickerInfo) => response)
     ).subscribe(
       data => {
         this.tickerNames = data[0];
@@ -92,7 +92,7 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
   }
 
   refresh(exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl) {
-    this.http.get<TickerInfo>(Constant.restApiUrl +`/get_ticker_info`).map((response:TickerInfo) => response).subscribe(
+    this.http.get<TickerInfo>(environment.restApiUrl +`/get_ticker_info`).map((response:TickerInfo) => response).subscribe(
       data => {
         this.tickerInfo = data;
       }

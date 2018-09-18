@@ -9,9 +9,9 @@ import { CarService } from './car-list/car.service';
 import {AppService} from "app/app.service";
 import {LoginComponent} from "./security/login.component";
 import {FormsModule} from "@angular/forms";
-import {JwtInterceptor} from "./jwt.interceptor";
+import {JwtInterceptor} from "./security/jwt.interceptor";
 import {LogoutComponent} from "./security/logout.component";
-import {AuthGuard} from "./auth.guard";
+import {AuthGuard} from "./security/auth.guard";
 import {TradeComponent} from "./trade/trade.component";
 import {HomeComponent} from "./misc/home.component";
 

@@ -4,7 +4,7 @@ import {
   HttpHeaders,
   HttpParams,
 } from '@angular/common/http';
-import {Constant} from "./model/constant";
+import {environment} from 'environments/environment';
 
 //(window as any).global = window;
 
@@ -34,7 +34,7 @@ export class AppService {
     body = body.set('username', username);
     body = body.set('password', password);
 
-    this.http.post(Constant.restApiUrl + `/login`, body, {headers: headers, observe: 'response'})
+    this.http.post(environment.restApiUrl + `/login`, body, {headers: headers, observe: 'response'})
       .subscribe(
         (res) => {
           console.log("token=" + res.headers.get("token"));

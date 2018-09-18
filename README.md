@@ -25,6 +25,9 @@ for start Angular server:
 
 <img src="https://gyazo.com/fa55379cc57d3c4e456f497a2eb37e67.png"></img>
 
+OR run with Production environment:
+<img src="https://i.gyazo.com/b95a40491ed281a6ea47a2139c3991a0.png"></img>
+
 in browser open http://localhost:4200
 ## Hot reloading
 

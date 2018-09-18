@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import {Constant} from "../model/constant";
+import {AppService} from "../app.service";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class CarService {
-  public API = Constant.restApiUrl;
+  public API = environment.restApiUrl;
   public CAR_API = this.API + '/cars';
 
   constructor(private http: HttpClient) {
