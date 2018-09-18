@@ -1,12 +1,13 @@
-import {AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import { AppService } from '../app.service';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {TickerName} from "../model/ticker.name";
 import {TickerInfo} from "../model/ticker.info";
-import {Observable} from "rxjs/Observable";
+import {Observable, Subscribable} from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
+import {Subscription} from "rxjs/Subscription";
 
 declare const TradingView: any;
 @Component({
@@ -14,7 +15,7 @@ declare const TradingView: any;
   templateUrl: './trade.component.html'
 })
 
-export class TradeComponent implements  OnInit, AfterViewInit, OnChanges {
+export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnChanges {
 
   tickerNames: Array<TickerName>;
 
@@ -31,6 +32,8 @@ export class TradeComponent implements  OnInit, AfterViewInit, OnChanges {
   tickerInfo: TickerInfo;
 
   params: Params;
+
+  subscriptionTimer: Subscription;
 
   constructor(private app: AppService, private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     console.log("Trade Component constructor");
@@ -121,9 +124,16 @@ export class TradeComponent implements  OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit() {
-    let sub = Observable.timer(2000,1000) // 1 sec reload orderBook, tradeHistory
+    this.subscriptionTimer = Observable.timer(2000,1000) // 1 sec reload orderBook, tradeHistory
       .subscribe((val) => { console.log('called'); this.refresh(this.params["exchange"], this.params["currency1"], this.params["currency2"]);});
   }
+
+  ngOnDestroy(){
+    console.log("Destroy timer");
+    this.subscriptionTimer.unsubscribe();
+
+  }
+
 
   ngAfterViewInit() {
     // new TradingView.widget({
