@@ -3,6 +3,16 @@
   max-width: 960px;
 }
 
+/**
+ * Colors
+ */
+.background-red {
+  background-color: #ffdcd2;
+}
+.background-green {
+  background-color: #bbffb3;
+}
+
 /*
  * Custom translucent site header
  */

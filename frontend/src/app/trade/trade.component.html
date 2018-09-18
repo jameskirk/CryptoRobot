@@ -90,7 +90,7 @@
             Sell orders:
             <table class="table table-striped">
               <thead>
-              <tr *ngFor="let orderBookEntity of tickerInfo?.orderBook?.ask">
+              <tr *ngFor="let orderBookEntity of tickerInfo?.orderBook?.ask" style="color:red">
                 <th>{{orderBookEntity?.price}}</th>
                 <th>{{orderBookEntity?.amount}}</th>
               </tr>
@@ -101,7 +101,7 @@
             Buy orders:
             <table class="table table-striped">
               <thead>
-              <tr *ngFor="let orderBookEntity of tickerInfo?.orderBook?.bid">
+              <tr *ngFor="let orderBookEntity of tickerInfo?.orderBook?.bid" style="color:green">
                 <th>{{orderBookEntity?.price}}</th>
                 <th>{{orderBookEntity?.amount}}</th>
               </tr>
@@ -122,10 +122,10 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-sm-6">
-              <table class="table table-striped">
+            <div class="col-sm-12">
+              <table class="table table-striped " >
                 <thead>
-                <tr *ngFor="let tradeHistory of tickerInfo?.tradeHistory">
+                <tr [ngClass]="(tradeHistory?.type == 'sell') ? 'background-red' : 'background-green'" *ngFor="let tradeHistory of tickerInfo?.tradeHistory">
                   <th>{{tradeHistory?.price}}</th>
                   <th>{{tradeHistory?.amount}}</th>
                 </tr>

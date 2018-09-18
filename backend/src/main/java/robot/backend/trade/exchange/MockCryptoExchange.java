@@ -50,7 +50,7 @@ public class MockCryptoExchange implements CryptoExchange {
     public List<TradeHistoryEntity> getTradeHistory(TickerName pairType) throws Exception {
         List<TradeHistoryEntity> retVal = new ArrayList<>();
         for (int i =0; i< getRand()*1.4; i++) {
-            retVal.add(new TradeHistoryEntity("sell", new BigDecimal(getRand() * 0.45), new BigDecimal(6000 + getRand() * 1.2), new Date()));
+            retVal.add(new TradeHistoryEntity(getRand() % 2 == 0 ? "sell" : "buy", new BigDecimal(getRand() * 0.45), new BigDecimal(6000 + getRand() * 1.2), new Date()));
         }
         return retVal;
     }
