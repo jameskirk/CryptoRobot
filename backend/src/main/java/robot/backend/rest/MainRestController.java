@@ -24,4 +24,5 @@ public class MainRestController {
     public Collection<Car> cars() {
         return Arrays.asList(new Car(new Long(1), "Bmw"), new Car(new Long(2), "Mersedes"));
     }
+
 }

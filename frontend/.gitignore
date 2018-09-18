@@ -12,6 +12,7 @@ target/
 
 # IDEs and editors
 .idea/*
+.idea/workspace.xml
 .project
 .classpath
 .c9/
