@@ -14,8 +14,6 @@ declare const TradingView: any;
   templateUrl: './trade.component.html'
 })
 
-
-
 export class TradeComponent implements  OnInit, AfterViewInit, OnChanges {
 
   tickerNames: Array<TickerName>;
@@ -32,18 +30,20 @@ export class TradeComponent implements  OnInit, AfterViewInit, OnChanges {
 
   tickerInfo: TickerInfo;
 
+  params: Params;
 
   constructor(private app: AppService, private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     console.log("Trade Component constructor");
 
     this.route.params.subscribe(
       (params : Params) => {
+        this.params = params;
         this.init(params["exchange"], params["currency1"], params["currency2"]);
       }
     );
   }
 
-  init(exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl: String) {
+  init(exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl) {
     this.exchanges = [];
     this.tickersOfSelectedExchange = [];
 
@@ -81,6 +81,14 @@ export class TradeComponent implements  OnInit, AfterViewInit, OnChanges {
     );
   }
 
+  refresh(exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl) {
+    this.http.get<TickerInfo>(`http://localhost:8080/get_ticker_info`).map((response:TickerInfo) => response).subscribe(
+      data => {
+        this.tickerInfo = data;
+      }
+    );
+  }
+
   handleTickerNames(tickerNames:Array<TickerName>,exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl: String) {
     for (const t of this.tickerNames) {
       if (this.exchanges.indexOf(t.exchange) == -1) {
@@ -113,10 +121,8 @@ export class TradeComponent implements  OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit() {
-  }
-
-  getSelectedTicker() {
-    return '' + this.selectedTickerCurrency1 + this.selectedTickerCurrency2;
+    let sub = Observable.timer(2000,1000) // 1 sec reload orderBook, tradeHistory
+      .subscribe((val) => { console.log('called'); this.refresh(this.params["exchange"], this.params["currency1"], this.params["currency2"]);});
   }
 
   ngAfterViewInit() {
