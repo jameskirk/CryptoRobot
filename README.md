@@ -4,8 +4,8 @@ Crypto Robot - application for crypto trading and crypto robot ![Build Status](h
 This project uses following libraries:
 
 1. Spring Boot v1.5.9
-2. Angular v5.0.4
-3. Node v8.9.0
+2. Angular v6.0.2
+3. Node v10.11.0
 4. Yarn v1.3.2
 
 ## Running the backend for development mode
@@ -26,7 +26,7 @@ for start Angular server:
 <img src="https://gyazo.com/fa55379cc57d3c4e456f497a2eb37e67.png"></img>
 
 OR run with Production environment:
-<img src="https://i.gyazo.com/b95a40491ed281a6ea47a2139c3991a0.png"></img>
+<img src="https://i.gyazo.com/c6bfa2ec7b2e56d897f308bd43830970.png"></img>
 
 in browser open http://localhost:4200
 ## Hot reloading
