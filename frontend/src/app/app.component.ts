@@ -9,7 +9,7 @@ import {AppService} from "./app.service";
 })
 export class AppComponent {
 
-  constructor(private app: AppService, private http: HttpClient, private router: Router) {
+  constructor(public app: AppService, private http: HttpClient, private router: Router) {
   }
 
   logout() {

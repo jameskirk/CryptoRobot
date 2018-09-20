@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent {
 
-  constructor(private app: AppService, private http: HttpClient, private router: Router) {
+  constructor(public app: AppService, private http: HttpClient, private router: Router) {
     console.log("Home Component constructor");
   }
 
