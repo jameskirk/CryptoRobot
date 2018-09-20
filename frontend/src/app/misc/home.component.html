@@ -1,0 +1,14 @@
+<section class="jumbotron text-center">
+  <div class="container">
+    <h1 class="jumbotron-heading">Welcome to Crypto Robot platform</h1>
+    <p class="lead text-muted">Crypto Robot is platform for crypto trading cryptocurrencies: BTC, ETH, XRP, etc. </p>
+    <p class="lead text-muted">It is also provides robots for automatic trading. And telegram bots</p>
+    <p>
+      <a *ngIf="app.isAuthenticated()" routerLink="/trade" class="btn btn-primary my-2">TRADE</a>
+      <a *ngIf="app.isAuthenticated()" routerLink="/logout" class="btn btn-secondary my-2">LOGOUT</a>
+
+      <a *ngIf="!app.isAuthenticated()" routerLink="/login" class="btn btn-primary my-2">LOGIN</a>
+      <a *ngIf="!app.isAuthenticated()" routerLink="/trade" class="btn btn-secondary my-2">VIEW DEMO</a>
+    </p>
+  </div>
+</section>
