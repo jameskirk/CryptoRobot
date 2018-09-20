@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/get_ticker_info").permitAll()
                 .antMatchers(HttpMethod.GET, "/get_ticker_info").permitAll()
                 // Need authentication.
-                .anyRequest().authenticated()
+                //.anyRequest().authenticated()
                 //
                 .and()
                 //

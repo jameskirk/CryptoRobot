@@ -38,6 +38,7 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
 
   constructor(private app: AppService, private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     console.log("Trade Component constructor");
+    console.log("apiURL=" + environment.restApiUrl);
 
     this.route.params.subscribe(
       (params : Params) => {
