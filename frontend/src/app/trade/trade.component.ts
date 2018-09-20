@@ -57,20 +57,14 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
     this.exchanges = [];
     this.tickersOfSelectedExchange = [];
 
-    await this.delay(1000);
-    this.http.get<Array<TickerName>>(environment.restApiUrl +`/get_ticker_names`).pipe(map((response: Array<TickerName>) => response))
-      .subscribe(data => {
-        this.tickerNames = data;
-    });
+    const resp1 = await this.http.get<Array<TickerName>>(environment.restApiUrl +`/get_ticker_names`).toPromise();
+    this.tickerNames = resp1;
 
-    this.http.get<TickerInfo>(environment.restApiUrl +`/get_ticker_info`).pipe(map((response: TickerInfo) => response))
-      .subscribe(data => {
-        this.handleTickerNames(this.tickerNames, exchangeFromUrl, currency1FromUrl, currency2FromUrl);
-        this.tickerInfo = data[1];
-      });
-    await this.delay(2000);
+    const resp2 = await this.http.get<TickerInfo>(environment.restApiUrl +`/get_ticker_info`).toPromise();
+    this.tickerInfo = resp2;
+    this.handleTickerNames(this.tickerNames, exchangeFromUrl, currency1FromUrl, currency2FromUrl);
 
-    new TradingView.widget({
+    await new TradingView.widget({
       'container_id': 'technical-analysis',
       "width": '100%',
       "height": '500',
