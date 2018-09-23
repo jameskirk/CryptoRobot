@@ -14,6 +14,9 @@ import {LogoutComponent} from './security/logout.component';
 import {TradeComponent} from './trade/trade.component';
 import {FormsModule} from '@angular/forms';
 import {JwtInterceptor} from './security/jwt.interceptor';
+import {AccordionModule} from 'primeng/accordion';
+import {ButtonModule} from 'primeng/button';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
@@ -39,7 +42,10 @@ const appRoutes: Routes = [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { enableTracing: false}),
-    FormsModule
+    FormsModule,
+    ButtonModule,
+    AccordionModule,
+    BrowserAnimationsModule
   ],
   exports: [
     RouterModule

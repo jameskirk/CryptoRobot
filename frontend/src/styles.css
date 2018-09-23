@@ -3,7 +3,6 @@ body {
   overflow-y: scroll !important;
 }
 
-
 .container {
   max-width: 960px;
 }
@@ -17,6 +16,24 @@ body {
 .background-green {
   background-color: #bbffb3;
 }
+
+body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a {
+  background-color: rgba(0,0,0,.03);
+  border: 1px solid rgba(0,0,0,.03);
+  color:black;
+}
+body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a:hover {
+  background-color: rgba(0,0,0,.13);
+  border: 1px solid rgba(0,0,0,.13);
+  color:black;
+}
+body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a .ui-accordion-toggle-icon {
+  color: black;
+}
+body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a:hover .ui-accordion-toggle-icon {
+  color: black;
+}
+
 
 /*
  * Custom translucent site header

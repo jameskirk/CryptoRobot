@@ -8,7 +8,8 @@ import {environment} from '../../environments/environment';
 import {Observable, Subscription} from 'rxjs';
 import { timer } from 'rxjs';
 import { forkJoin } from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, window} from 'rxjs/operators';
+import {_document} from '@angular/platform-browser/src/browser';
 
 
 declare const TradingView: any;
@@ -84,6 +85,8 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
       'popup_width': '1000',
       'popup_height': '650'
     });
+    let t = (<any>window).isMobile;
+    console.log(t);
   }
 
   refresh(exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl) {

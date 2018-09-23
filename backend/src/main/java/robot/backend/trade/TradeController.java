@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import robot.backend.trade.exchange.BitfinexCryptoExhange;
 import robot.backend.trade.exchange.CryptoExchange;
 import robot.backend.trade.exchange.MockCryptoExchange;
+import robot.backend.trade.exchange.bitmex.BitmexCryptoExchange;
 import robot.backend.trade.model.contant.CryptoExchangeName;
 import robot.backend.trade.model.contant.Currency;
 import robot.backend.trade.model.rest.TickerInfo;
@@ -20,10 +21,11 @@ public class TradeController {
     private Map<CryptoExchangeName, CryptoExchange> cryptoExchangeList = new HashMap<>();
 
     public TradeController() {
+        cryptoExchangeList.put(CryptoExchangeName.bitmex, new BitmexCryptoExchange());
+        cryptoExchangeList.put(CryptoExchangeName.bitfinex, new BitfinexCryptoExhange());
+
         cryptoExchangeList.put(CryptoExchangeName.mock, new MockCryptoExchange(CryptoExchangeName.bitmex, Arrays.asList(new TickerName(robot.backend.trade.model.contant.Currency.BTC, robot.backend.trade.model.contant.Currency.USD),
                 new TickerName(robot.backend.trade.model.contant.Currency.ETH, Currency.USD))));
-
-        cryptoExchangeList.put(CryptoExchangeName.bitmex, new BitfinexCryptoExhange());
     }
 
     @RequestMapping(value = "/get_ticker_names")
@@ -42,7 +44,7 @@ public class TradeController {
     @RequestMapping(value = "/get_ticker_info")
     @ResponseBody
     public TickerInfo getTickerInfo() throws Exception {
-        CryptoExchangeName cryptoExchangeNameFromInput = CryptoExchangeName.mock;
+        CryptoExchangeName cryptoExchangeNameFromInput = CryptoExchangeName.bitmex;
         TickerName tickerNameFromInput = new TickerName(Currency.BTC, Currency.USD);
 
         TickerInfo retVal = new TickerInfo();
