@@ -7,6 +7,10 @@ body {
   max-width: 960px;
 }
 
+tr{
+  line-height: 7px;
+}
+
 /**
  * Colors
  */

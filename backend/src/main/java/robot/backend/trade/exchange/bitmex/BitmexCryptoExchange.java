@@ -89,9 +89,10 @@ public class BitmexCryptoExchange implements CryptoExchange {
     public OrderBook getOrderBook(TickerName pairType) throws Exception {
         BigDecimal price = getPrice(pairType);
         OrderBook retVal = new OrderBook();
+        final int COUNT = 20;
         for (OrderBookL2Data data : orderBookSocket.values()) {
-            if (new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(10))) == -1
-                    && new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(-10))) == 1) {
+            if (new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(COUNT))) == -1
+                    && new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(-COUNT))) == 1) {
                 OrderBook.OrderBookEntity entity = new OrderBook.OrderBookEntity(new BigDecimal(data.getPrice()), new BigDecimal(data.getSize()));
                 if ("Sell".equals(data.getSide())) {
                     retVal.getAsk().add(entity);
@@ -101,10 +102,38 @@ public class BitmexCryptoExchange implements CryptoExchange {
             }
         }
         retVal.getAsk().sort(Comparator.comparing(a -> a.getPrice()));
+
+        List<OrderBook.OrderBookEntity> ask = new ArrayList<>();
+        BigDecimal amountSum = new BigDecimal(0);
+        final BigDecimal filter = new BigDecimal("1");
+        BigDecimal addToEntryIfPriceGt = new BigDecimal(retVal.getAsk().get(0).getPrice().toBigInteger());
+            for (OrderBook.OrderBookEntity e: retVal.getAsk()) {
+            amountSum = amountSum.add(e.getAmount());
+            if (addToEntryIfPriceGt.compareTo(e.getPrice()) == 0 || addToEntryIfPriceGt.compareTo(e.getPrice()) == -1) {
+                ask.add(new OrderBook.OrderBookEntity(addToEntryIfPriceGt, amountSum));
+                amountSum = new BigDecimal(0);
+                addToEntryIfPriceGt = e.getPrice().add(filter);
+            }
+        }
+        retVal.setAsk(ask);
+
+
         retVal.getBid().sort(Comparator.comparing(a -> a.getPrice()));
         Collections.reverse(retVal.getBid());
-//        retVal.getAsk().stream().sorted((obj1, obj2) -> obj1.getPrice().compareTo(obj2.getPrice()));
-//        retVal.getBid().stream().sorted((obj1, obj2) -> obj2.getPrice().compareTo(obj1.getPrice()));
+
+        List<OrderBook.OrderBookEntity> bid = new ArrayList<>();
+        amountSum = new BigDecimal(0);
+        addToEntryIfPriceGt = new BigDecimal(retVal.getBid().get(0).getPrice().toBigInteger());
+        for (OrderBook.OrderBookEntity e: retVal.getBid()) {
+            amountSum = amountSum.add(e.getAmount());
+            if (addToEntryIfPriceGt.compareTo(e.getPrice()) == 0 || addToEntryIfPriceGt.compareTo(e.getPrice()) == 1) {
+                bid.add(new OrderBook.OrderBookEntity(addToEntryIfPriceGt, amountSum));
+                amountSum = new BigDecimal(0);
+                addToEntryIfPriceGt = e.getPrice().add(filter.negate());
+            }
+        }
+        retVal.setBid(bid);
+
         return retVal;
     }
 
