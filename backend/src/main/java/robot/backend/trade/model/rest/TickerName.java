@@ -1,5 +1,7 @@
 package robot.backend.trade.model.rest;
 
+import com.google.common.base.Objects;
+import org.apache.commons.lang3.StringUtils;
 import robot.backend.trade.model.contant.CryptoExchangeName;
 import robot.backend.trade.model.contant.Currency;
 
@@ -62,5 +64,14 @@ public class TickerName {
         this.exchange = exchange;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        TickerName tickerName = (TickerName) obj;
+        return StringUtils.equals(this.currency1, tickerName.currency1) && StringUtils.equals(this.currency2, tickerName.currency2);
+    }
 
+    @Override
+    public int hashCode(){
+        return Objects.hashCode(this.currency1, this.currency2);
+    }
 }

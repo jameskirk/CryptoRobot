@@ -3,6 +3,7 @@ package robot.backend.trade.exchange.bitmex;
 import com.google.gson.Gson;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.thymeleaf.util.StringUtils;
 import robot.backend.trade.exchange.CryptoExchange;
 import robot.backend.trade.model.contant.CryptoExchangeName;
 import robot.backend.trade.model.contant.Currency;
@@ -20,13 +21,57 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class BitmexCryptoExchange implements CryptoExchange {
 
-    private ConcurrentHashMap<String, OrderBookL2Data> orderBookSocket = new ConcurrentHashMap<>();
+    private Map<TickerName, TickerInfo> tickerInfoMap = new ConcurrentHashMap<>();
 
-    private Stack<TradeData> historySocket = new SizedStack<>(20);
+    //private Map<String, OrderBookL2Data> orderBookSocket = new ConcurrentHashMap<>();
+
+    //private Stack<TradeData> historySocket = new SizedStack<>(20);
 
     public BitmexCryptoExchange() {
+        for (TickerName t: getTickers()) {
+            tickerInfoMap.put(t, new TickerInfo(t));
+        }
         Thread t = new BitmexThread(this);
         t.start();
+    }
+
+    public static class TickerInfo {
+
+        private TickerName tickerName;
+
+        public TickerInfo(TickerName tickerName) {
+            this.tickerName = tickerName;
+        }
+
+        private Map<String, OrderBookL2Data> orderBookSocket = new ConcurrentHashMap<>();
+
+        private Stack<TradeData> historySocket = new SizedStack<>(20);
+
+        public Map<String, OrderBookL2Data> getOrderBookSocket() {
+            return orderBookSocket;
+        }
+
+        public void setOrderBookSocket(Map<String, OrderBookL2Data> orderBookSocket) {
+            this.orderBookSocket = orderBookSocket;
+        }
+
+        public Stack<TradeData> getHistorySocket() {
+            return historySocket;
+        }
+
+        public void setHistorySocket(Stack<TradeData> historySocket) {
+            this.historySocket = historySocket;
+        }
+
+        public TickerName getTickerName() {
+            return tickerName;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            TickerInfo tickerInfo = (TickerInfo) obj;
+            return tickerName.equals(tickerInfo.getTickerName());
+        }
     }
 
     public static class BitmexThread extends Thread {
@@ -55,7 +100,7 @@ public class BitmexCryptoExchange implements CryptoExchange {
 
     @Override
     public List<TickerName> getTickers() {
-        return Arrays.asList(new TickerName(getExchangeName(), Currency.BTC, Currency.USD),
+        return Arrays.asList(new TickerName(getExchangeName(), Currency.XBT, Currency.USD),
                 new TickerName(getExchangeName(), Currency.ETH, Currency.USD));
     }
 
@@ -63,21 +108,24 @@ public class BitmexCryptoExchange implements CryptoExchange {
     public BigDecimal getPrice(TickerName ticker) throws Exception {
         BigDecimal minAsk = null;
         BigDecimal maxBid = null;
-        for (OrderBookL2Data data : orderBookSocket.values()) {
-            BigDecimal dataPrice = new BigDecimal(data.getPrice());
-            if ("Sell".equals(data.getSide())) {
-                if (minAsk == null) {
-                    minAsk = dataPrice;
-                }
-                if (minAsk.compareTo(dataPrice) == 1) {
-                    minAsk = dataPrice;
-                }
-            } else {
-                if (maxBid == null) {
-                    maxBid = dataPrice;
-                }
-                if (maxBid.compareTo(dataPrice) == -1) {
-                    maxBid = dataPrice;
+        TickerInfo tickerInfo = tickerInfoMap.get(ticker);
+        for (OrderBookL2Data data : tickerInfo.orderBookSocket.values()) {
+            if (!StringUtils.isEmpty(data.getPrice())) {
+                BigDecimal dataPrice = new BigDecimal(data.getPrice());
+                if ("Sell".equals(data.getSide())) {
+                    if (minAsk == null) {
+                        minAsk = dataPrice;
+                    }
+                    if (minAsk.compareTo(dataPrice) == 1) {
+                        minAsk = dataPrice;
+                    }
+                } else {
+                    if (maxBid == null) {
+                        maxBid = dataPrice;
+                    }
+                    if (maxBid.compareTo(dataPrice) == -1) {
+                        maxBid = dataPrice;
+                    }
                 }
             }
 
@@ -86,28 +134,35 @@ public class BitmexCryptoExchange implements CryptoExchange {
     }
 
     @Override
-    public OrderBook getOrderBook(TickerName pairType) throws Exception {
-        BigDecimal price = getPrice(pairType);
+    public OrderBook getOrderBook(TickerName ticker) throws Exception {
+        BigDecimal price = getPrice(ticker);
+        TickerInfo tickerInfo = tickerInfoMap.get(ticker);
         OrderBook retVal = new OrderBook();
         final int COUNT = 20;
-        for (OrderBookL2Data data : orderBookSocket.values()) {
-            if (new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(COUNT))) == -1
+        List<OrderBook.OrderBookEntity> rawAsk = new ArrayList<>();
+        List<OrderBook.OrderBookEntity> rawBid = new ArrayList<>();
+        for (OrderBookL2Data data : tickerInfo.orderBookSocket.values()) {
+            if (!StringUtils.isEmpty(data.getPrice()) && new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(COUNT))) == -1
                     && new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(-COUNT))) == 1) {
                 OrderBook.OrderBookEntity entity = new OrderBook.OrderBookEntity(new BigDecimal(data.getPrice()), new BigDecimal(data.getSize()));
                 if ("Sell".equals(data.getSide())) {
-                    retVal.getAsk().add(entity);
+                    rawAsk.add(entity);
                 } else {
-                    retVal.getBid().add(entity);
+                    rawBid.add(entity);
                 }
             }
         }
-        retVal.getAsk().sort(Comparator.comparing(a -> a.getPrice()));
+
+        if (rawAsk.size() == 0 || rawBid.size() == 0) {
+            return retVal;
+        }
+        rawAsk.sort(Comparator.comparing(a -> a.getPrice()));
 
         List<OrderBook.OrderBookEntity> ask = new ArrayList<>();
         BigDecimal amountSum = new BigDecimal(0);
         final BigDecimal filter = new BigDecimal("1");
-        BigDecimal addToEntryIfPriceGt = new BigDecimal(retVal.getAsk().get(0).getPrice().toBigInteger());
-            for (OrderBook.OrderBookEntity e: retVal.getAsk()) {
+        BigDecimal addToEntryIfPriceGt = new BigDecimal(rawAsk.get(0).getPrice().toBigInteger());
+            for (OrderBook.OrderBookEntity e: rawAsk) {
             amountSum = amountSum.add(e.getAmount());
             if (addToEntryIfPriceGt.compareTo(e.getPrice()) == 0 || addToEntryIfPriceGt.compareTo(e.getPrice()) == -1) {
                 ask.add(new OrderBook.OrderBookEntity(addToEntryIfPriceGt, amountSum));
@@ -118,13 +173,13 @@ public class BitmexCryptoExchange implements CryptoExchange {
         retVal.setAsk(ask);
 
 
-        retVal.getBid().sort(Comparator.comparing(a -> a.getPrice()));
-        Collections.reverse(retVal.getBid());
+        rawBid.sort(Comparator.comparing(a -> a.getPrice()));
+        Collections.reverse(rawBid);
 
         List<OrderBook.OrderBookEntity> bid = new ArrayList<>();
         amountSum = new BigDecimal(0);
-        addToEntryIfPriceGt = new BigDecimal(retVal.getBid().get(0).getPrice().toBigInteger());
-        for (OrderBook.OrderBookEntity e: retVal.getBid()) {
+        addToEntryIfPriceGt = new BigDecimal(rawBid.get(0).getPrice().toBigInteger());
+        for (OrderBook.OrderBookEntity e: rawBid) {
             amountSum = amountSum.add(e.getAmount());
             if (addToEntryIfPriceGt.compareTo(e.getPrice()) == 0 || addToEntryIfPriceGt.compareTo(e.getPrice()) == 1) {
                 bid.add(new OrderBook.OrderBookEntity(addToEntryIfPriceGt, amountSum));
@@ -140,7 +195,8 @@ public class BitmexCryptoExchange implements CryptoExchange {
     @Override
     public List<TradeHistoryEntity> getTradeHistory(TickerName pairType) throws Exception {
         List<TradeHistoryEntity> retVal = new ArrayList<>();
-        for (TradeData t: historySocket) {
+        TickerInfo tickerInfo = tickerInfoMap.get(pairType);
+        for (TradeData t: tickerInfo.getHistorySocket()) {
             retVal.add(new TradeHistoryEntity(t.getSide().toLowerCase(), new BigDecimal(t.getSize()), new BigDecimal(t.getPrice()), new Date()));
         }
         Collections.reverse(retVal);
@@ -159,7 +215,7 @@ public class BitmexCryptoExchange implements CryptoExchange {
 
         @Override
         public void onOpen(ServerHandshake handshakedata) {
-            send("{\"op\": \"subscribe\", \"args\": [\"orderBookL2:XBTUSD\", \"trade:XBTUSD\"]}");
+            send("{\"op\": \"subscribe\", \"args\": [\"orderBookL2:XBTUSD\", \"trade:XBTUSD\", \"orderBookL2:ETHUSD\", \"trade:ETHUSD\"]}");
             System.out.println("new connection opened");
         }
 
@@ -170,26 +226,57 @@ public class BitmexCryptoExchange implements CryptoExchange {
 
         @Override
         public void onMessage(String message) {
-            System.out.println("received message: " + message);
-            AbstractBitmexResponse abstractResponse = new Gson().fromJson(message, AbstractBitmexResponse.class);
-            if ("orderBookL2".equals(abstractResponse.getTable())) {
-                OrderBookL2Response response = new Gson().fromJson(message, OrderBookL2Response.class);
-                if ("partial".equals(response.getAction())) {
-                    for (OrderBookL2Data data : response.getData()) {
-                        exchange.orderBookSocket.put(data.getId(), data);
+            try {
+                //System.out.println("received message: " + message);
+                AbstractBitmexResponse abstractResponse = new Gson().fromJson(message, AbstractBitmexResponse.class);
+                if ("orderBookL2".equals(abstractResponse.getTable())) {
+                    OrderBookL2Response response = new Gson().fromJson(message, OrderBookL2Response.class);
+
+                    TickerInfo t =  exchange.tickerInfoMap.get(new TickerName(Currency.XBT, Currency.USD));
+                    if ("XBTUSD".equals(response.getData().get(0).getSymbol())) {
+                        t = exchange.tickerInfoMap.get(new TickerName(Currency.XBT, Currency.USD));
+                    } else if ("ETHUSD".equals(response.getData().get(0).getSymbol())) {
+                        t = exchange.tickerInfoMap.get(new TickerName(Currency.ETH, Currency.USD));
                     }
-                } else if ("update".equals(response.getAction())) {
-                    for (OrderBookL2Data data : response.getData()) {
-                        OrderBookL2Data dataFromMap = exchange.orderBookSocket.get(data.getId());
-                        dataFromMap.setSide(data.getSide());
-                        dataFromMap.setSize(data.getSize());
+                    if ("partial".equals(response.getAction())) {
+
+                        for (OrderBookL2Data data : response.getData()) {
+                            t.orderBookSocket.put(data.getId(), data);
+                        }
+                    } else if ("update".equals(response.getAction())) {
+                        for (OrderBookL2Data data : response.getData()) {
+                            OrderBookL2Data dataFromMap = t.orderBookSocket.get(data.getId());
+                            if (dataFromMap == null) {
+                                dataFromMap = new OrderBookL2Data();
+                                t.orderBookSocket.put(data.getId(), dataFromMap);
+                            }
+                            dataFromMap.setSide(data.getSide());
+                            dataFromMap.setSize(data.getSize());
+                        }
+                    }  else if ("insert".equals(response.getAction())) {
+                        for (OrderBookL2Data data : response.getData()) {
+                            OrderBookL2Data dataFromMap = new OrderBookL2Data();
+                            t.orderBookSocket.put(data.getId(), dataFromMap);
+                            dataFromMap.setSide(data.getSide());
+                            dataFromMap.setSize(data.getSize());
+                        }
                     }
                 }
-            } else if ("trade".equals(abstractResponse.getTable())) {
-                TradeResponse response = new Gson().fromJson(message, TradeResponse.class);
-                for (TradeData data : response.getData()) {
-                    exchange.historySocket.push(data);
+
+                else if ("trade".equals(abstractResponse.getTable())) {
+                    TradeResponse response = new Gson().fromJson(message, TradeResponse.class);
+                    TickerInfo t =  exchange.tickerInfoMap.get(new TickerName(Currency.XBT, Currency.USD));
+                    if ("XBTUSD".equals(response.getData().get(0).getSymbol())) {
+                        t = exchange.tickerInfoMap.get(new TickerName(Currency.XBT, Currency.USD));
+                    } else if ("ETHUSD".equals(response.getData().get(0).getSymbol())) {
+                        t = exchange.tickerInfoMap.get(new TickerName(Currency.ETH, Currency.USD));
+                    }
+                    for (TradeData data : response.getData()) {
+                        t.historySocket.push(data);
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         }

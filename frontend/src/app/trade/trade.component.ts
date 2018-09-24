@@ -61,9 +61,10 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
     const resp1 = await this.http.get<Array<TickerName>>(environment.restApiUrl +`/get_ticker_names`).toPromise();
     this.tickerNames = resp1;
 
-    const resp2 = await this.http.get<TickerInfo>(environment.restApiUrl +`/get_ticker_info`).toPromise();
-    this.tickerInfo = resp2;
     this.handleTickerNames(this.tickerNames, exchangeFromUrl, currency1FromUrl, currency2FromUrl);
+
+    this.refresh();
+
 
     await new TradingView.widget({
       'container_id': 'technical-analysis',
@@ -89,8 +90,14 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
     console.log(t);
   }
 
-  refresh(exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl) {
-    this.http.get<TickerInfo>(environment.restApiUrl +`/get_ticker_info`).pipe(map((response:TickerInfo) => response)).subscribe(
+  refresh() {
+    if (this.selectedExchange == null || this.selectedTickerCurrency1 == null || this.selectedTickerCurrency2 == null) {
+      return;
+    }
+    const body = {
+      exchange: this.selectedExchange, currency1: this.selectedTickerCurrency1, currency2: this.selectedTickerCurrency2
+    }
+    this.http.post<TickerInfo>(environment.restApiUrl +`/get_ticker_info`, body).pipe(map((response:TickerInfo) => response)).subscribe(
       data => {
         this.tickerInfo = data;
       }
@@ -130,7 +137,7 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
   }
 
   ngOnInit() {
-    this.subscriptionTimer = timer(2000,1000).subscribe((val) => { console.log('called'); this.refresh(this.params["exchange"], this.params["currency1"], this.params["currency2"]);});
+    this.subscriptionTimer = timer(2000,1000).subscribe((val) => { console.log('called'); this.refresh();});
   }
 
   ngOnDestroy(){

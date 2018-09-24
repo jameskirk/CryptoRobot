@@ -73,7 +73,7 @@
                     <thead>
                     <tr *ngFor="let orderBookEntity of tickerInfo?.orderBook?.ask" style="color:red">
                       <th>{{orderBookEntity?.price}}</th>
-                      <th>{{orderBookEntity?.amount}}</th>
+                      <th>{{orderBookEntity?.amount.toLocaleString('ru')}}</th>
                     </tr>
                     </thead>
                   </table>
@@ -84,7 +84,7 @@
                     <thead>
                     <tr *ngFor="let orderBookEntity of tickerInfo?.orderBook?.bid" style="color:green">
                       <th>{{orderBookEntity?.price}}</th>
-                      <th>{{orderBookEntity?.amount}}</th>
+                      <th>{{orderBookEntity?.amount.toLocaleString('ru')}}</th>
                     </tr>
                     </thead>
                   </table>
@@ -107,7 +107,7 @@
                     <thead>
                     <tr [ngClass]="(tradeHistory?.type == 'sell') ? 'background-red' : 'background-green'" *ngFor="let tradeHistory of tickerInfo?.tradeHistory">
                       <th>{{tradeHistory?.price}}</th>
-                      <th>{{tradeHistory?.amount}}</th>
+                      <th>{{tradeHistory?.amount.toLocaleString('ru')}}</th>
                     </tr>
                     </thead>
                   </table>

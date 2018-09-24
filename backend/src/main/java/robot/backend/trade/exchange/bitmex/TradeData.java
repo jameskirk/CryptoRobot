@@ -8,6 +8,7 @@ public class TradeData {
     private String side; // Seel / Buy
     private String size;
     private String price;
+    private String symbol;
 
     public Date getTimestamp() {
         return timestamp;
@@ -39,5 +40,13 @@ public class TradeData {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 }
