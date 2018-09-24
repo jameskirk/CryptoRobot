@@ -27,7 +27,7 @@ public class WebSocketTest {
 
         @Override
         public void onOpen(ServerHandshake handshakedata) {
-            send("{\"op\": \"subscribe\", \"args\": [\"tradeBin1m:XBTUSD\"]}");
+            send("{\"op\": \"subscribe\", \"args\": [\"trade:XBTUSD\"]}");
             System.out.println("new connection opened");
         }
 

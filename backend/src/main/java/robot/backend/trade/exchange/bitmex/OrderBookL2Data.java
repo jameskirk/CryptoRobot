@@ -1,6 +1,6 @@
 package robot.backend.trade.exchange.bitmex;
 
-public class Data {
+public class OrderBookL2Data {
 
     private String symbol;
     private String id;

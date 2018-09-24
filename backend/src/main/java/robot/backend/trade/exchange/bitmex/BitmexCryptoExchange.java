@@ -9,6 +9,7 @@ import robot.backend.trade.model.contant.Currency;
 import robot.backend.trade.model.rest.OrderBook;
 import robot.backend.trade.model.rest.TickerName;
 import robot.backend.trade.model.rest.TradeHistoryEntity;
+import robot.backend.trade.util.SizedStack;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -19,7 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class BitmexCryptoExchange implements CryptoExchange {
 
-    private ConcurrentHashMap<String, Data> orderBookSocket = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, OrderBookL2Data> orderBookSocket = new ConcurrentHashMap<>();
+
+    private Stack<TradeData> historySocket = new SizedStack<>(20);
 
     public BitmexCryptoExchange() {
         Thread t = new BitmexThread(this);
@@ -60,7 +63,7 @@ public class BitmexCryptoExchange implements CryptoExchange {
     public BigDecimal getPrice(TickerName ticker) throws Exception {
         BigDecimal minAsk = null;
         BigDecimal maxBid = null;
-        for (Data data: orderBookSocket.values()) {
+        for (OrderBookL2Data data : orderBookSocket.values()) {
             BigDecimal dataPrice = new BigDecimal(data.getPrice());
             if ("Sell".equals(data.getSide())) {
                 if (minAsk == null) {
@@ -78,7 +81,7 @@ public class BitmexCryptoExchange implements CryptoExchange {
                 }
             }
 
-    }
+        }
         return minAsk;
     }
 
@@ -86,9 +89,9 @@ public class BitmexCryptoExchange implements CryptoExchange {
     public OrderBook getOrderBook(TickerName pairType) throws Exception {
         BigDecimal price = getPrice(pairType);
         OrderBook retVal = new OrderBook();
-        for (Data data: orderBookSocket.values()) {
-            if (new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(20))) == -1
-                    && new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(-20))) == 1) {
+        for (OrderBookL2Data data : orderBookSocket.values()) {
+            if (new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(10))) == -1
+                    && new BigDecimal(data.getPrice()).compareTo(price.add(new BigDecimal(-10))) == 1) {
                 OrderBook.OrderBookEntity entity = new OrderBook.OrderBookEntity(new BigDecimal(data.getPrice()), new BigDecimal(data.getSize()));
                 if ("Sell".equals(data.getSide())) {
                     retVal.getAsk().add(entity);
@@ -107,7 +110,12 @@ public class BitmexCryptoExchange implements CryptoExchange {
 
     @Override
     public List<TradeHistoryEntity> getTradeHistory(TickerName pairType) throws Exception {
-        return new ArrayList<>();
+        List<TradeHistoryEntity> retVal = new ArrayList<>();
+        for (TradeData t: historySocket) {
+            retVal.add(new TradeHistoryEntity(t.getSide().toLowerCase(), new BigDecimal(t.getSize()), new BigDecimal(t.getPrice()), new Date()));
+        }
+        Collections.reverse(retVal);
+        return retVal;
     }
 
     public static class BitmexWebSocket extends WebSocketClient {
@@ -122,7 +130,7 @@ public class BitmexCryptoExchange implements CryptoExchange {
 
         @Override
         public void onOpen(ServerHandshake handshakedata) {
-            send("{\"op\": \"subscribe\", \"args\": [\"orderBookL2:XBTUSD\"]}");
+            send("{\"op\": \"subscribe\", \"args\": [\"orderBookL2:XBTUSD\", \"trade:XBTUSD\"]}");
             System.out.println("new connection opened");
         }
 
@@ -134,16 +142,24 @@ public class BitmexCryptoExchange implements CryptoExchange {
         @Override
         public void onMessage(String message) {
             System.out.println("received message: " + message);
-            OrderBookL2Response response =  new Gson().fromJson(message, OrderBookL2Response.class);
-            if ("partial".equals(response.getAction())) {
-                for (Data data: response.getData()) {
-                    exchange.orderBookSocket.put(data.getId(), data);
+            AbstractBitmexResponse abstractResponse = new Gson().fromJson(message, AbstractBitmexResponse.class);
+            if ("orderBookL2".equals(abstractResponse.getTable())) {
+                OrderBookL2Response response = new Gson().fromJson(message, OrderBookL2Response.class);
+                if ("partial".equals(response.getAction())) {
+                    for (OrderBookL2Data data : response.getData()) {
+                        exchange.orderBookSocket.put(data.getId(), data);
+                    }
+                } else if ("update".equals(response.getAction())) {
+                    for (OrderBookL2Data data : response.getData()) {
+                        OrderBookL2Data dataFromMap = exchange.orderBookSocket.get(data.getId());
+                        dataFromMap.setSide(data.getSide());
+                        dataFromMap.setSize(data.getSize());
+                    }
                 }
-            } else if("update".equals(response.getAction())) {
-                for (Data data: response.getData()) {
-                    Data dataFromMap = exchange.orderBookSocket.get(data.getId());
-                    dataFromMap.setSide(data.getSide());
-                    dataFromMap.setSize(data.getSize());
+            } else if ("trade".equals(abstractResponse.getTable())) {
+                TradeResponse response = new Gson().fromJson(message, TradeResponse.class);
+                for (TradeData data : response.getData()) {
+                    exchange.historySocket.push(data);
                 }
             }
 
