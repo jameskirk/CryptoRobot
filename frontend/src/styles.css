@@ -10,6 +10,9 @@ body {
 tr{
   line-height: 7px;
 }
+th {
+  font-weight: normal;
+}
 
 /**
  * Colors
@@ -21,15 +24,27 @@ tr{
   background-color: #bbffb3;
 }
 
+/**
+ * PRIMEFACES start
+ */
+body .ui-accordion {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+body .ui-accordion .ui-accordion-header a {
+  padding: 0.25em 1em;
+}
 body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a {
-  background-color: rgba(0,0,0,.03);
-  border: 1px solid rgba(0,0,0,.03);
-  color:black;
+  background-color: #f8f9fa;
+  border: 1px solid rgba(0,0,0,.13);
+  color: #6c757d;
 }
 body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a:hover {
   background-color: rgba(0,0,0,.13);
   border: 1px solid rgba(0,0,0,.13);
-  color:black;
+  color: #6c757d;
 }
 body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a .ui-accordion-toggle-icon {
   color: black;
@@ -37,12 +52,14 @@ body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active 
 body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a:hover .ui-accordion-toggle-icon {
   color: black;
 }
+/**
+ * PRIMEFACES end
+ */
 
 
 /*
- * Custom translucent site header
+ * BOOTSTRAP start
  */
-
 .site-header {
   background-color: rgba(0, 0, 0, .85);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -57,69 +74,31 @@ body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active 
   text-decoration: none;
 }
 
+.list-group-item {
+  padding: .30rem 0.6rem;
+}
+.list-group-item:hover {
+  z-index: 0;
+}
 /*
- * Dummy devices (replace them with your own or something else entirely!)
+ * BOOTSTRAP end
  */
-
-.product-device {
-  position: absolute;
-  right: 10%;
-  bottom: -30%;
-  width: 300px;
-  height: 540px;
-  background-color: #333;
-  border-radius: 21px;
-  -webkit-transform: rotate(30deg);
-  transform: rotate(30deg);
-}
-
-.product-device::before {
-  position: absolute;
-  top: 10%;
-  right: 10px;
-  bottom: 10%;
-  left: 10px;
-  content: "";
-  background-color: rgba(255, 255, 255, .1);
-  border-radius: 5px;
-}
-
-.product-device-2 {
-  top: -25%;
-  right: auto;
-  bottom: 0;
-  left: 5%;
-  background-color: #e5e5e5;
-}
-
 
 /*
  * Extra utilities
  */
 
-.border-top { border-top: 1px solid #e5e5e5; }
-.border-bottom { border-bottom: 1px solid #e5e5e5; }
+/*.flex-equal > * {*/
+  /*-ms-flex: 1;*/
+  /*-webkit-box-flex: 1;*/
+  /*flex: 1;*/
+/*}*/
+/*@media (min-width: 768px) {*/
+  /*.flex-md-equal > * {*/
+    /*-ms-flex: 1;*/
+    /*-webkit-box-flex: 1;*/
+    /*flex: 1;*/
+  /*}*/
+/*}*/
 
-.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
-
-.flex-equal > * {
-  -ms-flex: 1;
-  -webkit-box-flex: 1;
-  flex: 1;
-}
-@media (min-width: 768px) {
-  .flex-md-equal > * {
-    -ms-flex: 1;
-    -webkit-box-flex: 1;
-    flex: 1;
-  }
-}
-
-.overflow-hidden { overflow: hidden; }
-
-/**
- * Tables
- */
-th {
-  font-weight: normal;
-}
+/*.overflow-hidden { overflow: hidden; }*/
