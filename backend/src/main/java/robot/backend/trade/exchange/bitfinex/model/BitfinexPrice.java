@@ -1,4 +1,4 @@
-package robot.backend.trade.model.dto;
+package robot.backend.trade.exchange.bitfinex.model;
 
 public class BitfinexPrice {
     public String last_price;

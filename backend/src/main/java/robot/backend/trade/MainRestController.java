@@ -1,4 +1,4 @@
-package robot.backend.rest;
+package robot.backend.trade;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,4 +22,29 @@ public class MainRestController {
         return Arrays.asList(new Car(new Long(1), "Bmw"), new Car(new Long(2), "Mersedes"));
     }
 
+    public static class Car {
+        private Long id;
+        private String name;
+
+        public Car(Long id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
 }

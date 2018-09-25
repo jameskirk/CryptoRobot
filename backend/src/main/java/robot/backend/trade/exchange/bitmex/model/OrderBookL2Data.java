@@ -1,4 +1,4 @@
-package robot.backend.trade.exchange.bitmex;
+package robot.backend.trade.exchange.bitmex.model;
 
 public class OrderBookL2Data {
 

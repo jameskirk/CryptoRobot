@@ -1,7 +1,6 @@
-package robot.backend.trade.model.internal;
+package robot.backend.trade.model.rest;
 
 import robot.backend.trade.model.contant.PositionType;
-import robot.backend.trade.model.rest.TickerName;
 
 import java.math.BigDecimal;
 

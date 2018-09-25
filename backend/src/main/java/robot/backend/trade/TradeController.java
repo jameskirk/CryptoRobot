@@ -12,7 +12,6 @@ import robot.backend.trade.model.rest.TickerInfo;
 import robot.backend.trade.model.rest.TickerName;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
 public class TradeController {
@@ -32,11 +31,12 @@ public class TradeController {
     public Collection<TickerName> getTickerNames() {
         try {
             List<TickerName> retVal = new ArrayList<>();
-            for (Map.Entry<CryptoExchangeName, CryptoExchange> entry : cryptoExchangeList.entrySet()) {
-                for (TickerName ticker : entry.getValue().getTickers()) {
-                    retVal.add(new TickerName(entry.getKey(), ticker.getCurrency1(), ticker.getCurrency2()));
+            List<CryptoExchangeName> names = new ArrayList<>(cryptoExchangeList.keySet());
+            names.sort( (a1, a2) -> a1.toString().compareTo(a2.toString()));
+            for (CryptoExchangeName entry : names) {
+                for (TickerName ticker : cryptoExchangeList.get(entry).getTickers()) {
+                    retVal.add(new TickerName(entry, ticker.getCurrency1(), ticker.getCurrency2()));
                 }
-
             }
             return retVal;
         } catch (Exception e) {
@@ -84,70 +84,5 @@ public class TradeController {
         }
     }
 
-
-
-//    @RequestMapping("/trade_info")
-//    @ResponseBody
-//    public String getTradeInfo(String cryptoExhangeNameAsString, String pairAsString) {
-//        try {
-//            PairType pair;
-//            try {
-//                pair = PairType.valueOf(pairAsString);
-//            } catch (IllegalStateException e) {
-//                return "pair not found";
-//            }
-//
-//            //CryptoExchange cryptoExchange = new CexIoCryptoExchange();
-//            CryptoExchangeName cryptoExchangeName;
-//            try {
-//                cryptoExchangeName = CryptoExchangeName.valueOf(cryptoExhangeNameAsString);
-//            } catch (IllegalStateException e) {
-//                return "exhange not found";
-//            }
-//
-//            CryptoExchange cryptoExchange = null;
-//            for (CryptoExchange ce : cryptoExchangeList) {
-//                if (ce.getExchangeName().equals(cryptoExchangeName)) {
-//                    cryptoExchange = ce;
-//                }
-//            }
-//            if (cryptoExchange == null) {
-//                return "exhange not found";
-//            }
-//
-//            tradeBean = new TradeBean();
-//
-//            tradeBean.setSelectedCryptoExchangeName(cryptoExchangeName);
-//            tradeBean.setPairType(pair);
-//            List<CryptoExchangeName> cryptoExchangeNames = new ArrayList<>();
-//            for (CryptoExchange ce : cryptoExchangeList) {
-//                cryptoExchangeNames.add(ce.getExchangeName());
-//            }
-//            tradeBean.setCryptoExchangeNameList(cryptoExchangeNames);
-//
-//
-//            for (PairType p : cryptoExchange.getPairs()) {
-//                tradeBean.getPairList().add(p);
-//            }
-//
-//            BigDecimal price = cryptoExchange.getPrice(pair);
-//            tradeBean.setPrice(price);
-//
-//            OrderBook orderBook = cryptoExchange.getOrderBook(pair);
-//            tradeBean.setOrderBook(orderBook);
-//
-//            List<Position> postionList = cryptoExchange.getOpenPosition(pair);
-//            tradeBean.setPositions(postionList);
-//            return tradeBean.toString();
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
-    private int getRand() {
-        return ThreadLocalRandom.current().nextInt(4, 10 + 1);
-    }
 
 }

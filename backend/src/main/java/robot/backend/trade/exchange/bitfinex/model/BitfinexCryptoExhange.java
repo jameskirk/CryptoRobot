@@ -1,12 +1,12 @@
-package robot.backend.trade.exchange;
+package robot.backend.trade.exchange.bitfinex.model;
 
-import robot.backend.trade.util.RestHelper;
+import robot.backend.trade.exchange.CryptoExchange;
 import robot.backend.trade.model.contant.CryptoExchangeName;
 import robot.backend.trade.model.contant.Currency;
-import robot.backend.trade.model.dto.BitfinexPrice;
 import robot.backend.trade.model.rest.OrderBook;
 import robot.backend.trade.model.rest.TickerName;
 import robot.backend.trade.model.rest.TradeHistoryEntity;
+import robot.backend.trade.util.RestHelper;
 
 import java.math.BigDecimal;
 import java.util.Arrays;

@@ -1,4 +1,6 @@
-package robot.backend.trade.exchange.bitmex;
+package robot.backend.trade.exchange.bitmex.model;
+
+import robot.backend.trade.exchange.bitmex.AbstractBitmexResponse;
 
 import java.util.List;
 
