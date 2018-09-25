@@ -68,6 +68,7 @@ public class BitmexWebSocket extends WebSocketClient {
                         t.getOrderBookSocket().put(data.getId(), dataFromMap);
                         dataFromMap.setSide(data.getSide());
                         dataFromMap.setSize(data.getSize());
+                        dataFromMap.setPrice(data.getPrice());
                     }
                 }
             }

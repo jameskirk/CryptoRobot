@@ -157,9 +157,24 @@ public class BitmexCryptoExchange implements CryptoExchange {
         List<TradeHistoryEntity> retVal = new ArrayList<>();
         BitmexTickerInfo bitmexTickerInfo = tickerInfoMap.get(pairType);
         for (TradeData t: bitmexTickerInfo.getHistorySocket()) {
-            retVal.add(new TradeHistoryEntity(t.getSide().toLowerCase(), new BigDecimal(t.getSize()), new BigDecimal(t.getPrice()), new Date()));
+            if (retVal.size() > 0) {
+                TradeHistoryEntity lastAdded = retVal.get(retVal.size() - 1);
+                if (lastAdded.getType().equals(t.getSide().toLowerCase()) && lastAdded.getAmount().add(new BigDecimal(t.getSize())).compareTo(new BigDecimal(1000)) == -1) {
+                    lastAdded.setAmount(lastAdded.getAmount().add(new BigDecimal(t.getSize())));
+                } else {
+                    retVal.add(new TradeHistoryEntity(t.getSide().toLowerCase(), new BigDecimal(t.getSize()), new BigDecimal(t.getPrice()), new Date()));
+                }
+            }
+            else {
+                retVal.add(new TradeHistoryEntity(t.getSide().toLowerCase(), new BigDecimal(t.getSize()), new BigDecimal(t.getPrice()), new Date()));
+            }
         }
         Collections.reverse(retVal);
+        int retValMaxSize = 20;
+        if (retVal.size() < retValMaxSize) {
+            retValMaxSize = retVal.size();
+        }
+        retVal = retVal.subList(0, retValMaxSize - 1);
         return retVal;
     }
 
