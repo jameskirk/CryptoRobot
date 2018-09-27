@@ -29,6 +29,7 @@ frontend/.idea/*
 !.vscode/extensions.json
 
 # misc
+.mvn/
 .sass-cache
 connect.lock
 coverage
