@@ -82,11 +82,11 @@ public class TradeController {
             retVal.setPrice(cryptoExchange.getPrice(tickerNameFromInput));
             retVal.setOrderBook(cryptoExchange.getOrderBook(tickerNameFromInput));
             retVal.setTradeHistory(cryptoExchange.getTradeHistory(tickerNameFromInput));
-            int maxSizeOrderBook = 15;
+            int maxSizeOrderBook = 20;
             maxSizeOrderBook = Math.min(maxSizeOrderBook, retVal.getOrderBook().getAsk().size());
             maxSizeOrderBook = Math.min(maxSizeOrderBook, retVal.getOrderBook().getBid().size());
-            retVal.getOrderBook().setAsk(retVal.getOrderBook().getAsk().subList(0, maxSizeOrderBook));
-            retVal.getOrderBook().setBid(retVal.getOrderBook().getBid().subList(0, maxSizeOrderBook));
+            retVal.getOrderBook().setAsk(retVal.getOrderBook().getAsk().subList(0, maxSizeOrderBook - 1));
+            retVal.getOrderBook().setBid(retVal.getOrderBook().getBid().subList(0, maxSizeOrderBook - 1));
             return retVal;
         } catch (Exception e) {
             e.printStackTrace();

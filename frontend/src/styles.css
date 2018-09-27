@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 body {
   overflow-y: scroll !important;
+  background-color: rgba(244, 244, 244, 0.55);
 }
 
 .container {
@@ -101,6 +102,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 .list-group-item:hover {
   z-index: 0;
+}
+.list-group-item {
+  border-color: rgba(0, 0, 0, 0.22);
 }
 /*
  * BOOTSTRAP end

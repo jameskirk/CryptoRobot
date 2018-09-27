@@ -54,36 +54,8 @@
         <!--Order book-->
         <p-accordion class="mb-4">
           <p-accordionTab header="OrderBook" [selected]="true">
-            <div class="row p-0">
-              <div class="col pr-3" style="min-width: 280px">
-                <div class="widget orderBook">
-                  <div class="ask table-striped">
-                    <p-table [value]="tickerInfo?.orderBook?.ask">
-                      <ng-template pTemplate="header">
-                        <tr>
-                          <th>Price</th>
-                          <th>Amount</th>
-                          <th>Summary</th>
-                        </tr>
-                      </ng-template>
-                      <ng-template pTemplate="body" let-entry>
-                        <tr>
-                          <td class="price">{{entry?.price}}</td>
-                          <td>{{entry?.amount.toLocaleString('ru')}}</td>
-                          <td class="cumSize">
-                            <div>
-                              <div class="depthBar"
-                                   [ngStyle]="{ 'width' : 100*(entry?.sum / tickerInfo?.orderBook?.askSum) + '%' }"></div>
-                              <span class="output">{{entry?.sum}}</span></div>
-                          </td>
-                        </tr>
-                      </ng-template>
-                    </p-table>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col pl-3" style="min-width: 300px">
+            <div class="row p-0 m-0">
+              <div class="col p-0" style="min-width: 250px">
                 <div class="widget orderBook">
                   <div class="bid table-striped">
                     <p-table [value]="tickerInfo?.orderBook?.bid">
@@ -96,13 +68,46 @@
                       </ng-template>
                       <ng-template pTemplate="body" let-entry>
                         <tr>
-                          <td class="price">{{entry?.price}}</td>
-                          <td>{{entry?.amount.toLocaleString('ru')}}</td>
                           <td class="cumSize">
+                              <span class="output">{{entry?.sum.toLocaleString('ru')}}</span>
+                          </td>
+                          <td>{{entry?.amount.toLocaleString('ru')}}</td>
+
+                          <td class="price">
+                            <div>
+                              <div class="depthBar" style="right: 0px;" [ngStyle]="{ 'width' : 100*(entry?.sum / tickerInfo?.orderBook?.bidSum) + '%' }"></div>
+                              <span class="output">{{entry?.price}}</span>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col p-0" style="min-width: 250px">
+                <div class="widget orderBook">
+                  <div class="ask table-striped">
+                    <p-table [value]="tickerInfo?.orderBook?.ask">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Price</th>
+                          <th>Amount</th>
+                          <th>Summary</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-entry>
+                        <tr>
+                          <td class="price">
                             <div>
                               <div class="depthBar"
-                                   [ngStyle]="{ 'width' : 100*(entry?.sum / tickerInfo?.orderBook?.bidSum) + '%' }"></div>
-                              <span class="output">{{entry?.sum}}</span></div>
+                                   [ngStyle]="{ 'width' : 100*(entry?.sum / tickerInfo?.orderBook?.askSum) + '%' }"></div>
+                              <span class="output">{{entry?.price}}</span></div>
+                          </td>
+                          <td>{{entry?.amount.toLocaleString('ru')}}</td>
+                          <td class="cumSize">
+                              <span class="output">{{entry?.sum.toLocaleString('ru')}}</span>
                           </td>
                         </tr>
                       </ng-template>
@@ -118,7 +123,7 @@
       </div>
 
       <!--Trade history-->
-      <div class="col">
+      <div class="col"  style="min-width: 200px">
 
         <p-accordion class="mb-4">
           <p-accordionTab header="Recent trades" [selected]="true">

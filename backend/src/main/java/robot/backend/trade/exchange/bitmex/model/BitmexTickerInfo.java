@@ -17,7 +17,7 @@ public class BitmexTickerInfo {
 
     private Map<String, OrderBookL2Data> orderBookSocket = new ConcurrentHashMap<>();
 
-    private Stack<TradeData> historySocket = new SizedStack<>(100);
+    private Stack<TradeData> historySocket = new SizedStack<>(500);
 
     public Map<String, OrderBookL2Data> getOrderBookSocket() {
         return orderBookSocket;
