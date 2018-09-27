@@ -41,7 +41,16 @@ public class BitmexCryptoExchange implements CryptoExchange {
         public void run() {
             try {
                 BitmexWebSocket webSocket = new BitmexWebSocket(exchange);
+                while (true) {
+                    if (webSocket.isClosed()) {
+                        Thread.sleep(10000);
+                        webSocket =  new BitmexWebSocket(exchange);
+                    }
+                }
+
             } catch (URISyntaxException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -98,7 +107,7 @@ public class BitmexCryptoExchange implements CryptoExchange {
         }
         BitmexTickerInfo bitmexTickerInfo = tickerInfoMap.get(ticker);
         OrderBook retVal = new OrderBook();
-        final int COUNT = 20;
+        final int COUNT = 100;
         List<OrderBook.OrderBookEntity> rawAsk = new ArrayList<>();
         List<OrderBook.OrderBookEntity> rawBid = new ArrayList<>();
         for (OrderBookL2Data data : bitmexTickerInfo.getOrderBookSocket().values()) {
@@ -159,7 +168,7 @@ public class BitmexCryptoExchange implements CryptoExchange {
         for (TradeData t: bitmexTickerInfo.getHistorySocket()) {
             if (retVal.size() > 0) {
                 TradeHistoryEntity lastAdded = retVal.get(retVal.size() - 1);
-                if (lastAdded.getType().equals(t.getSide().toLowerCase()) && lastAdded.getAmount().add(new BigDecimal(t.getSize())).compareTo(new BigDecimal(1000)) == -1) {
+                if (lastAdded.getType().equals(t.getSide().toLowerCase()) && lastAdded.getAmount().add(new BigDecimal(t.getSize())).compareTo(new BigDecimal(10000)) == -1) {
                     lastAdded.setAmount(lastAdded.getAmount().add(new BigDecimal(t.getSize())));
                 } else {
                     retVal.add(new TradeHistoryEntity(t.getSide().toLowerCase(), new BigDecimal(t.getSize()), new BigDecimal(t.getPrice()), new Date()));

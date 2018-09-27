@@ -37,7 +37,7 @@ body .ui-accordion .ui-accordion-header a {
   padding: 0.25em 1em;
 }
 body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a {
-  background-color: #f8f9fa;
+  background-color: #ecedee;
   border: 1px solid rgba(0,0,0,.13);
   color: #6c757d;
 }
@@ -52,6 +52,24 @@ body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active 
 body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a:hover .ui-accordion-toggle-icon {
   color: black;
 }
+
+body .ui-widget {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1rem;
+}
+body .ui-accordion .ui-accordion-content {
+  padding: 0em 0em;
+}
+/** primefaces tables **/
+body .ui-table .ui-table-tbody > tr > td {
+  padding: 0em 0em;
+}
+.table td, .table th {
+  vertical-align: middle;
+}
+body .ui-table .ui-table-thead > tr > th {
+  font-weight: normal;
+}
 /**
  * PRIMEFACES end
  */
@@ -60,6 +78,10 @@ body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active 
 /*
  * BOOTSTRAP start
  */
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+}
 .site-header {
   background-color: rgba(0, 0, 0, .85);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -84,21 +106,51 @@ body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active 
  * BOOTSTRAP end
  */
 
-/*
- * Extra utilities
- */
+/** order book history */
+.orderBook .ask tbody tr:hover {
+  background: rgba(232, 112, 79, 0.4);
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(43, 43, 43, 0.05);
+}
+.orderBook .ask td.price, .orderBook .ask td.price .myOrder  {
+  color: #ae543b;
+}
+.orderBook td {
+  position: relative;
+  line-height: 1.8rem;
+}
+td {
+  position: relative;
+  line-height: 1.8rem;
+}
+.orderBook .ask .depthBar {
+  background-color: #e8704f;
+}
 
-/*.flex-equal > * {*/
-  /*-ms-flex: 1;*/
-  /*-webkit-box-flex: 1;*/
-  /*flex: 1;*/
-/*}*/
-/*@media (min-width: 768px) {*/
-  /*.flex-md-equal > * {*/
-    /*-ms-flex: 1;*/
-    /*-webkit-box-flex: 1;*/
-    /*flex: 1;*/
-  /*}*/
-/*}*/
-
-/*.overflow-hidden { overflow: hidden; }*/
+.orderBook .bid tbody tr:hover {
+  background: rgba(232, 112, 79, 0.4);
+}
+.orderBook .bid tbody tr:hover {
+  background: rgba(82,179,112,0.3);
+}
+.orderBook .bid td.price, .orderBook .bid td.price .myOrder {
+  color: #3e8654;
+}
+.orderBook .bid .depthBar {
+  background-color: #52b370;
+}
+.orderBook .depthBar {
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  opacity: 0.4;
+  color:black;
+}
+/** trade history */
+.buy-color {
+  background: rgba(82, 179, 112, 0.16) !important;;
+}
+.sell-color {
+  background: rgba(232, 112, 79, 0.16) !important;
+}

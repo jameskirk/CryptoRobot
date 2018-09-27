@@ -6,15 +6,20 @@ export class TickerInfo {
 
  export class OrderBook {
   ask: Array<OrderBookEntity>;
+  askSum: number;
   bid: Array<OrderBookEntity>;
+  bidSum: number;
+
+
 }
 
- class OrderBookEntity {
+export class OrderBookEntity {
   price: number;
   amount: number;
+  sum: number;
 }
 
- class TradeHistoryEntity {
+export class TradeHistoryEntity {
   type: string;
   amount: number;
   price: number;

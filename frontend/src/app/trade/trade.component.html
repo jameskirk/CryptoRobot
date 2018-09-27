@@ -8,7 +8,8 @@
         <span class="badge badge-secondary badge-pill">{{exchanges.length}}</span>
       </span>
       <ul class="list-group">
-        <li *ngFor="let exchange of exchanges" [ngClass]="(exchange == selectedExchange) ? 'list-group-item d-flex justify-content-between bg-dark' : 'list-group-item d-flex justify-content-between lh-condensed'">
+        <li *ngFor="let exchange of exchanges"
+            [ngClass]="(exchange == selectedExchange) ? 'list-group-item d-flex justify-content-between bg-dark' : 'list-group-item d-flex justify-content-between lh-condensed'">
           <div>
             <span class="my-0"><a class="d-md-inline-block" routerLink="/trade/{{exchange}}/{{selectedTickerCurrency1}}/{{selectedTickerCurrency2}}">{{exchange}}</a></span>
           </div>
@@ -23,9 +24,11 @@
         <span class="badge badge-secondary badge-pill">{{tickersOfSelectedExchange.length}}</span>
       </span>
       <ul class="list-group">
-        <li *ngFor="let ticker of tickersOfSelectedExchange" [ngClass]="(ticker.currency1 == selectedTickerCurrency1 && ticker.currency2 == selectedTickerCurrency2 ) ? 'list-group-item d-flex justify-content-between bg-dark' : 'list-group-item d-flex justify-content-between lh-condensed'">
+        <li *ngFor="let ticker of tickersOfSelectedExchange"
+            [ngClass]="(ticker.currency1 == selectedTickerCurrency1 && ticker.currency2 == selectedTickerCurrency2 ) ? 'list-group-item d-flex justify-content-between bg-dark' : 'list-group-item d-flex justify-content-between lh-condensed'">
           <div>
-            <span class="my-0"><a class="d-md-inline-block" routerLink="/trade/{{selectedExchange}}/{{ticker.currency1}}/{{ticker.currency2}}">{{ticker.currency1}} {{ticker.currency2}}</a></span>
+            <span class="my-0"><a class="d-md-inline-block"
+                                  routerLink="/trade/{{selectedExchange}}/{{ticker.currency1}}/{{ticker.currency2}}">{{ticker.currency1}} {{ticker.currency2}}</a></span>
           </div>
           <span class="text-muted">6600</span>
         </li>
@@ -34,78 +37,118 @@
   </div>
 
 
-  <div class="mr-md-3 pt-3 px-3 text-center overflow-hidden col-md-11">
-    <div class="p-3">
+  <div class="mr-md-3 pt-3 px-3 text-center overflow-hidden col">
+    <div class="pt-3"></div>
 
 
-      <p-accordion class="mb-4">
-        <p-accordionTab header="Chart" id="123"  [selected]="true">
-          <div id="technical-analysis"></div>
-        </p-accordionTab>
-      </p-accordion>
+    <p-accordion class="mb-4">
+      <p-accordionTab header="Chart" [selected]="true">
+        <div id="technical-analysis"></div>
+      </p-accordionTab>
+    </p-accordion>
 
-      <!--Order book + Trade history ROW-->
-      <div class="row mt-3">
-        <div class="col">
+    <!--Order book + Trade history ROW-->
+    <div class="row mt-3">
+      <div class="col mb-3">
 
-          <!--Order book-->
-          <div class="card mb-4 box-shadow">
-            <div class="card-header py-1">
-              <span class="my-0 font-weight-normal">Order book</span>
-            </div>
-            <div class="card-body p-1">
-              <div class="row">
-                <div class="col-sm-6">
-                  Sell orders:
-                  <table class="table table-striped">
-                    <thead>
-                    <tr *ngFor="let orderBookEntity of tickerInfo?.orderBook?.ask" style="color:red">
-                      <th>{{orderBookEntity?.price}}</th>
-                      <th>{{orderBookEntity?.amount.toLocaleString('ru')}}</th>
-                    </tr>
-                    </thead>
-                  </table>
+        <!--Order book-->
+        <p-accordion class="mb-4">
+          <p-accordionTab header="OrderBook" [selected]="true">
+            <div class="row p-0">
+              <div class="col pr-3" style="min-width: 280px">
+                <div class="widget orderBook">
+                  <div class="ask table-striped">
+                    <p-table [value]="tickerInfo?.orderBook?.ask">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Price</th>
+                          <th>Amount</th>
+                          <th>Summary</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-entry>
+                        <tr>
+                          <td class="price">{{entry?.price}}</td>
+                          <td>{{entry?.amount.toLocaleString('ru')}}</td>
+                          <td class="cumSize">
+                            <div>
+                              <div class="depthBar"
+                                   [ngStyle]="{ 'width' : 100*(entry?.sum / tickerInfo?.orderBook?.askSum) + '%' }"></div>
+                              <span class="output">{{entry?.sum}}</span></div>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
                 </div>
-                <div class="col-sm-6">
-                  Buy orders:
-                  <table class="table table-striped">
-                    <thead>
-                    <tr *ngFor="let orderBookEntity of tickerInfo?.orderBook?.bid" style="color:green">
-                      <th>{{orderBookEntity?.price}}</th>
-                      <th>{{orderBookEntity?.amount.toLocaleString('ru')}}</th>
-                    </tr>
-                    </thead>
-                  </table>
+              </div>
+
+              <div class="col pl-3" style="min-width: 300px">
+                <div class="widget orderBook">
+                  <div class="bid table-striped">
+                    <p-table [value]="tickerInfo?.orderBook?.bid">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Price</th>
+                          <th>Amount</th>
+                          <th>Summary</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-entry>
+                        <tr>
+                          <td class="price">{{entry?.price}}</td>
+                          <td>{{entry?.amount.toLocaleString('ru')}}</td>
+                          <td class="cumSize">
+                            <div>
+                              <div class="depthBar"
+                                   [ngStyle]="{ 'width' : 100*(entry?.sum / tickerInfo?.orderBook?.bidSum) + '%' }"></div>
+                              <span class="output">{{entry?.sum}}</span></div>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </p-accordionTab>
+        </p-accordion>
 
-        <!--Trade history-->
-        <div class="col">
-          <div class="card mb-4 box-shadow">
-            <div class="card-header py-1">
-              <span class="my-0 font-weight-normal">Recent Trades</span>
-            </div>
-            <div class="card-body p-1">
-              <div class="row">
-                <div class="col-sm-12">
-                  <table class="table table-striped " >
-                    <thead>
-                    <tr [ngClass]="(tradeHistory?.type == 'sell') ? 'background-red' : 'background-green'" *ngFor="let tradeHistory of tickerInfo?.tradeHistory">
-                      <th>{{tradeHistory?.price}}</th>
-                      <th>{{tradeHistory?.amount.toLocaleString('ru')}}</th>
+
+      </div>
+
+      <!--Trade history-->
+      <div class="col">
+
+        <p-accordion class="mb-4">
+          <p-accordionTab header="Recent trades" [selected]="true">
+            <div class="row">
+              <div class="col-sm-12">
+
+                <p-table [value]="tickerInfo?.tradeHistory">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>Price</th>
+                      <th>Amount</th>
                     </tr>
-                    </thead>
-                  </table>
-                </div>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-entry>
+                    <tr [ngClass]="entry?.type == 'sell' ? 'sell-color' : 'buy-color'">
+                      <td>{{entry?.price}}</td>
+                      <td><span class="output" >{{entry?.amount.toLocaleString('ru')}}</span></td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+
+
               </div>
             </div>
-          </div>
-        </div>
+          </p-accordionTab>
+        </p-accordion>
+
       </div>
 
     </div>
   </div>
+
 </div>

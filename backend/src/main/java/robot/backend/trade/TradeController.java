@@ -1,6 +1,8 @@
 package robot.backend.trade;
 
 import com.google.gson.Gson;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 import robot.backend.trade.exchange.CryptoExchange;
@@ -16,6 +18,8 @@ import java.util.*;
 @RestController
 public class TradeController {
 
+    private static final Log logger = LogFactory.getLog(TradeController.class);
+
     private Map<CryptoExchangeName, CryptoExchange> cryptoExchangeList = new HashMap<>();
 
     public TradeController() {
@@ -29,6 +33,7 @@ public class TradeController {
     @RequestMapping(value = "/get_ticker_names")
     @ResponseBody
     public Collection<TickerName> getTickerNames() {
+        logger.debug("/get_ticker_names ");
         try {
             List<TickerName> retVal = new ArrayList<>();
             List<CryptoExchangeName> names = new ArrayList<>(cryptoExchangeList.keySet());
@@ -49,7 +54,7 @@ public class TradeController {
     @ResponseBody
     public TickerInfo getTickerInfo(@RequestBody String body) throws Exception {
         try {
-            System.out.println("/getTickerInfo " + body);
+            logger.debug("/getTickerInfo " + body);
             if (body == null) {
                 return new TickerInfo();
             }
@@ -77,6 +82,11 @@ public class TradeController {
             retVal.setPrice(cryptoExchange.getPrice(tickerNameFromInput));
             retVal.setOrderBook(cryptoExchange.getOrderBook(tickerNameFromInput));
             retVal.setTradeHistory(cryptoExchange.getTradeHistory(tickerNameFromInput));
+            int maxSizeOrderBook = 15;
+            maxSizeOrderBook = Math.min(maxSizeOrderBook, retVal.getOrderBook().getAsk().size());
+            maxSizeOrderBook = Math.min(maxSizeOrderBook, retVal.getOrderBook().getBid().size());
+            retVal.getOrderBook().setAsk(retVal.getOrderBook().getAsk().subList(0, maxSizeOrderBook));
+            retVal.getOrderBook().setBid(retVal.getOrderBook().getBid().subList(0, maxSizeOrderBook));
             return retVal;
         } catch (Exception e) {
             e.printStackTrace();

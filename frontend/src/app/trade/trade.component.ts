@@ -3,13 +3,14 @@ import { AppService } from '../app.service';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {TickerName} from '../model/ticker.name';
-import {TickerInfo} from '../model/ticker.info';
+import {OrderBookEntity, TickerInfo} from '../model/ticker.info';
 import {environment} from '../../environments/environment';
 import {Observable, Subscription} from 'rxjs';
 import { timer } from 'rxjs';
 import { forkJoin } from 'rxjs';
 import {map, window} from 'rxjs/operators';
 import {_document} from '@angular/platform-browser/src/browser';
+import {e} from '@angular/core/src/render3';
 
 
 declare const TradingView: any;
@@ -32,9 +33,9 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
 
   selectedTickerCurrency2: String;
 
-  tickerInfo: TickerInfo;
-
   params: Params;
+
+  tickerInfo: TickerInfo;
 
   subscriptionTimer: Subscription;
 
@@ -90,18 +91,26 @@ export class TradeComponent implements  OnInit, OnDestroy , AfterViewInit, OnCha
     console.log(t);
   }
 
-  refresh() {
+  async refresh() {
     if (this.selectedExchange == null || this.selectedTickerCurrency1 == null || this.selectedTickerCurrency2 == null) {
       return;
     }
     const body = {
       exchange: this.selectedExchange, currency1: this.selectedTickerCurrency1, currency2: this.selectedTickerCurrency2
     }
-    this.http.post<TickerInfo>(environment.restApiUrl +`/get_ticker_info`, body).pipe(map((response:TickerInfo) => response)).subscribe(
-      data => {
-        this.tickerInfo = data;
-      }
-    );
+    const resp2 = await this.http.post<TickerInfo>(environment.restApiUrl +`/get_ticker_info`, body).toPromise();
+    this.tickerInfo = resp2;
+
+    this.tickerInfo.orderBook.askSum = 0;
+    for (let e of this.tickerInfo.orderBook.ask) {
+      e.sum = this.tickerInfo.orderBook.askSum + e.amount;
+      this.tickerInfo.orderBook.askSum = e.sum;
+    }
+    this.tickerInfo.orderBook.bidSum = 0;
+    for (let e of this.tickerInfo.orderBook.bid) {
+      e.sum = this.tickerInfo.orderBook.bidSum + e.amount;
+      this.tickerInfo.orderBook.bidSum = e.sum;
+    }
   }
 
   handleTickerNames(tickerNames:Array<TickerName> ,exchangeFromUrl: String, currency1FromUrl: String, currency2FromUrl: String) {

@@ -1,4 +1,6 @@
 package robot.backend.security;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -12,11 +14,13 @@ import java.io.IOException;
 
 public class JWTAuthenticationFilter extends GenericFilterBean {
 
+    private static final Log logger = LogFactory.getLog(JWTAuthenticationFilter.class);
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
-        System.out.println("JWTAuthenticationFilter.doFilter");
+        logger.debug("JWTAuthenticationFilter.doFilter");
 
         Authentication authentication = TokenAuthenticationService
                 .getAuthentication((HttpServletRequest) servletRequest);

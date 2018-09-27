@@ -16,7 +16,9 @@ import {FormsModule} from '@angular/forms';
 import {JwtInterceptor} from './security/jwt.interceptor';
 import {AccordionModule} from 'primeng/accordion';
 import {ButtonModule} from 'primeng/button';
+import {TableModule} from 'primeng/table';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
@@ -45,6 +47,7 @@ const appRoutes: Routes = [
     FormsModule,
     ButtonModule,
     AccordionModule,
+    TableModule,
     BrowserAnimationsModule
   ],
   exports: [

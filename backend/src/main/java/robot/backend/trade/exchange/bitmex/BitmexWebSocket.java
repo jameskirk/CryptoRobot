@@ -1,6 +1,8 @@
 package robot.backend.trade.exchange.bitmex;
 
 import com.google.gson.Gson;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import robot.backend.trade.exchange.bitmex.model.*;
@@ -13,6 +15,8 @@ import java.nio.ByteBuffer;
 
 public class BitmexWebSocket extends WebSocketClient {
 
+    private static final Log logger = LogFactory.getLog(BitmexWebSocket.class);
+
     private BitmexCryptoExchange exchange;
 
     public BitmexWebSocket(BitmexCryptoExchange exchange) throws URISyntaxException {
@@ -24,19 +28,24 @@ public class BitmexWebSocket extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         send("{\"op\": \"subscribe\", \"args\": [\"orderBookL2:XBTUSD\", \"trade:XBTUSD\", \"orderBookL2:ETHUSD\", \"trade:ETHUSD\"]}");
-        System.out.println("new connection opened");
+        logger.info("new connection opened with Bitmex: " + handshakedata.getHttpStatusMessage());
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        System.out.println("closed with exit code " + code + " additional info: " + reason);
+        logger.error("closed with exit code " + code + " additional info: " + reason);
+        try {
+            Thread.sleep(30*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         this.reconnect();
     }
 
     @Override
     public void onMessage(String message) {
         try {
-            System.out.println("received message: " + message);
+            logger.debug("received message: " + message);
             AbstractBitmexResponse abstractResponse = new Gson().fromJson(message, AbstractBitmexResponse.class);
             if ("orderBookL2".equals(abstractResponse.getTable())) {
                 OrderBookL2Response response = new Gson().fromJson(message, OrderBookL2Response.class);
@@ -70,6 +79,11 @@ public class BitmexWebSocket extends WebSocketClient {
                         dataFromMap.setSize(data.getSize());
                         dataFromMap.setPrice(data.getPrice());
                     }
+                }  else if ("remove".equals(response.getAction())) {
+                    for (OrderBookL2Data data : response.getData()) {
+                        OrderBookL2Data dataFromMap = new OrderBookL2Data();
+                        t.getOrderBookSocket().remove(data.getId());
+                    }
                 }
             }
 
@@ -93,11 +107,17 @@ public class BitmexWebSocket extends WebSocketClient {
 
     @Override
     public void onMessage(ByteBuffer message) {
-        System.out.println("received ByteBuffer");
+        logger.debug("received ByteBuffer");
     }
 
     @Override
     public void onError(Exception ex) {
-        System.err.println("an error occurred:" + ex);
+        logger.error("an error occurred:" + ex);
+        try {
+            Thread.sleep(30*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        this.reconnect();
     }
 }
